@@ -1,0 +1,230 @@
+'use client';
+
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { Prompt, Settings, PromptContextType, PromptFormData } from '../types';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { searchPrompts, generateId, downloadFile, getAllTags, validatePrompt } from '../utils/helpers';
+import { useToast } from './ToastContext';
+
+const PromptContext = createContext<PromptContextType | undefined>(undefined);
+
+export const usePrompts = () => {
+  const context = useContext(PromptContext);
+  if (!context) {
+    throw new Error('usePrompts must be used within a PromptProvider');
+  }
+  return context;
+};
+
+const defaultSettings: Settings = {
+  theme: 'light',
+  view_mode: 'grid',
+  last_backup: Date.now(),
+};
+
+export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { addToast } = useToast();
+  
+  const [prompts, setPrompts] = useLocalStorage<Prompt[]>("promptvault_prompts", []);
+  const [settings, setSettings] = useLocalStorage<Settings>("promptvault_settings", defaultSettings);
+  
+  const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [sortBy, setSortBy] = useState<string>('updated');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+  const filteredPrompts = useMemo(() => {
+    let filtered = [...prompts];
+    
+    if (searchQuery.trim()) {
+      filtered = searchPrompts(filtered, searchQuery);
+    }
+    
+    if (selectedTags.length > 0) {
+      filtered = filtered.filter(prompt =>
+        selectedTags.every(tag => prompt.tags.includes(tag))
+      );
+    }
+    
+    if (showFavorites) {
+      filtered = filtered.filter(prompt => prompt.is_favorite);
+    }
+    
+    filtered.sort((a, b) => {
+      let comparison = 0;
+      switch (sortBy) {
+        case 'name': comparison = a.title.localeCompare(b.title); break;
+        case 'created': comparison = a.created_at - b.created_at; break;
+        case 'updated': comparison = a.updated_at - b.updated_at; break;
+        case 'usage': comparison = a.usage_count - b.usage_count; break;
+        default: comparison = a.updated_at - b.updated_at;
+      }
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+    
+    return filtered;
+  }, [prompts, searchQuery, selectedTags, showFavorites, sortBy, sortOrder]);
+
+  const addPrompt = useCallback((promptData: PromptFormData) => {
+    const validation = validatePrompt(promptData);
+    if (!validation.isValid) {
+      addToast({ type: 'error', title: 'Validation failed', message: validation.errors.join(', ') });
+      return;
+    }
+
+    const newPrompt: Prompt = {
+      id: generateId(),
+      title: promptData.title.trim(),
+      content: promptData.content.trim(),
+      description: promptData.description.trim(),
+      tags: promptData.tags.filter(tag => tag.trim().length > 0),
+      created_at: Date.now(),
+      updated_at: Date.now(),
+      usage_count: 0,
+      is_favorite: false,
+    };
+    
+    setPrompts(prev => [...prev, newPrompt]);
+    addToast({ type: 'success', title: 'Prompt created successfully!' });
+  }, [setPrompts, addToast]);
+
+  const updatePrompt = useCallback((id: string, promptData: PromptFormData) => {
+    const validation = validatePrompt(promptData);
+    if (!validation.isValid) {
+      addToast({ type: 'error', title: 'Validation failed', message: validation.errors.join(', ') });
+      return;
+    }
+
+    setPrompts(prev => prev.map(prompt => 
+      prompt.id === id 
+        ? {
+            ...prompt,
+            title: promptData.title.trim(),
+            content: promptData.content.trim(),
+            description: promptData.description.trim(),
+            tags: promptData.tags.filter(tag => tag.trim().length > 0),
+            updated_at: Date.now(),
+          }
+        : prompt
+    ));
+    
+    addToast({ type: 'success', title: 'Prompt updated successfully!' });
+  }, [setPrompts, addToast]);
+
+  const deletePrompt = useCallback((id: string) => {
+    setPrompts(prev => prev.filter(prompt => prompt.id !== id));
+    if (selectedPrompt?.id === id) setSelectedPrompt(null);
+    addToast({ type: 'success', title: 'Prompt deleted successfully!' });
+  }, [setPrompts, selectedPrompt, addToast]);
+
+  const toggleFavorite = useCallback((id: string) => {
+    setPrompts(prev => prev.map(prompt => 
+      prompt.id === id 
+        ? { ...prompt, is_favorite: !prompt.is_favorite, updated_at: Date.now() }
+        : prompt
+    ));
+  }, [setPrompts]);
+
+  const incrementUsage = useCallback((id: string) => {
+    setPrompts(prev => prev.map(prompt => 
+      prompt.id === id 
+        ? { ...prompt, usage_count: prompt.usage_count + 1, updated_at: Date.now() }
+        : prompt
+    ));
+  }, [setPrompts]);
+
+  const selectPrompt = useCallback((prompt: Prompt | null) => {
+    setSelectedPrompt(prompt);
+  }, []);
+
+  const updateSettings = useCallback((newSettings: Partial<Settings>) => {
+    setSettings(prev => ({ ...prev, ...newSettings }));
+  }, [setSettings]);
+
+  const setSortOptions = useCallback((newSortBy: string, newSortOrder: 'asc' | 'desc') => {
+    setSortBy(newSortBy);
+    setSortOrder(newSortOrder);
+  }, []);
+
+  const handleExportData = useCallback(() => {
+    const jsonData = JSON.stringify({
+      prompts,
+      settings,
+      exportDate: new Date().toISOString(),
+      version: '1.0.0'
+    }, null, 2);
+    
+    const filename = `promptvault-export-${new Date().toISOString().split('T')[0]}.json`;
+    downloadFile(jsonData, filename, 'application/json');
+    
+    setSettings(prev => ({ ...prev, last_backup: Date.now() }));
+    addToast({ type: 'success', title: 'Data exported successfully!' });
+  }, [prompts, settings, setSettings, addToast]);
+
+  const handleImportData = useCallback(async (file: File) => {
+    try {
+      setIsLoading(true);
+      const text = await file.text();
+      const data = JSON.parse(text);
+      
+      if (!data.prompts || !Array.isArray(data.prompts)) {
+        throw new Error('Invalid data format');
+      }
+      
+      setPrompts(data.prompts);
+      if (data.settings) {
+        setSettings(prev => ({ ...prev, ...data.settings }));
+      }
+      
+      addToast({ type: 'success', title: 'Data imported successfully!' });
+    } catch (error) {
+      addToast({ type: 'error', title: 'Import failed', message: 'Please check the file format.' });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [setPrompts, setSettings, addToast]);
+
+  const clearAllData = useCallback(() => {
+    setPrompts([]);
+    setSettings(defaultSettings);
+    setSelectedPrompt(null);
+    setSearchQuery('');
+    setSelectedTags([]);
+    setShowFavorites(false);
+    addToast({ type: 'success', title: 'All data cleared successfully!' });
+  }, [setPrompts, setSettings, addToast]);
+
+  const contextValue: PromptContextType = {
+    prompts,
+    settings,
+    filteredPrompts,
+    selectedPrompt,
+    isLoading,
+    error,
+    addPrompt,
+    updatePrompt,
+    deletePrompt,
+    toggleFavorite,
+    incrementUsage,
+    selectPrompt,
+    updateSettings,
+    setSearchQuery,
+    setSelectedTags,
+    setShowFavorites,
+    setSortOptions,
+    exportData: handleExportData,
+    importData: handleImportData,
+    clearAllData,
+  };
+
+  return (
+    <PromptContext.Provider value={contextValue}>
+      {children}
+    </PromptContext.Provider>
+  );
+};
