@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PromptFormProps, PromptFormData } from "@/types";
 import { validatePrompt } from "@/utils/helpers";
-import Button from "@/components/UI/Button";
+import { Button } from "@/components/ui/button";
 import { X, Plus } from "lucide-react";
 
 const PromptForm: React.FC<PromptFormProps> = ({
@@ -174,18 +174,13 @@ const PromptForm: React.FC<PromptFormProps> = ({
       <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
         <Button
           type="button"
-          variant="ghost"
+          variant="secondary"
           onClick={onCancel}
           disabled={isLoading}
         >
           Cancel
         </Button>
-        <Button
-          type="submit"
-          variant="primary"
-          loading={isLoading}
-          disabled={isLoading}
-        >
+        <Button type="submit" variant="default" disabled={isLoading}>
           {prompt ? "Update Prompt" : "Create Prompt"}
         </Button>
       </div>

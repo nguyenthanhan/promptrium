@@ -1,7 +1,7 @@
 import React from "react";
 import { PromptCardProps } from "@/types";
 import { useClipboard } from "@/hooks/useClipboard";
-import { useToast } from "@/contexts/ToastContext";
+import { useToast } from "@/components/ui/use-toast";
 import { formatDate, truncateText } from "@/utils/helpers";
 import {
   Heart,
@@ -13,7 +13,7 @@ import {
   Tag,
   CheckCircle,
 } from "lucide-react";
-import Button from "@/components/UI/Button";
+import { Button } from "@/components/ui/button";
 
 const PromptCard: React.FC<PromptCardProps> = ({
   prompt,
@@ -24,15 +24,15 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onToggleFavorite,
 }) => {
   const { copy, copied } = useClipboard();
-  const { addToast } = useToast();
+  const { toast } = useToast();
 
   const handleCopy = async () => {
     const success = await copy(prompt.content);
     if (success) {
       onCopy(prompt);
-      addToast({ type: "success", title: "Copied to clipboard!" });
+      toast({ title: "Copied to clipboard!" });
     } else {
-      addToast({ type: "error", title: "Copy failed" });
+      toast({ title: "Copy failed" });
     }
   };
 
@@ -196,7 +196,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
 
       <div className="flex items-center space-x-2">
         <Button
-          variant="primary"
+          variant="default"
           size="sm"
           onClick={handleCopy}
           className={`flex-1 ${

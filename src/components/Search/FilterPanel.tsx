@@ -8,7 +8,7 @@ import {
   ArrowDown,
   X,
 } from "lucide-react";
-import Button from "@/components/UI/Button";
+import { Button } from "@/components/ui/button";
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
   availableTags,
@@ -62,7 +62,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-gray-700">Quick Filter</h4>
         <Button
-          variant={showFavorites ? "primary" : "ghost"}
+          variant={showFavorites ? "default" : "ghost"}
           size="sm"
           onClick={() => onFavoritesChange(!showFavorites)}
           className="w-full justify-start"

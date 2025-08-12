@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { usePrompts } from "@/contexts/PromptContext";
-import { useToast } from "@/contexts/ToastContext";
+import { useToast } from "@/components/ui/use-toast";
 import { getAllTags } from "@/utils/helpers";
 import { Prompt, ModalType, PromptFormData } from "@/types";
 
@@ -11,8 +11,14 @@ import SearchBar from "@/components/Search/SearchBar";
 import FilterPanel from "@/components/Search/FilterPanel";
 import PromptCard from "@/components/Prompt/PromptCard";
 import PromptForm from "@/components/Prompt/PromptForm";
-import Button from "@/components/UI/Button";
-import Modal from "@/components/UI/Modal";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 // Icons
 import {
@@ -45,7 +51,7 @@ export default function Home() {
     importData,
   } = usePrompts();
 
-  const { addToast } = useToast();
+  const { toast } = useToast();
 
   // Local state
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
@@ -100,10 +106,9 @@ export default function Home() {
       try {
         await importData(file);
       } catch {
-        addToast({
-          type: "error",
+        toast({
           title: "Import failed",
-          message: "Failed to import data. Please check the file format.",
+          description: "Failed to import data. Please check the file format.",
         });
       }
     }
@@ -233,8 +238,12 @@ export default function Home() {
                 <Github className="w-4 h-4" />
               </a>
 
-              <Button variant="primary" size="sm" onClick={openCreateModal}>
-                <Plus className="w-4 h-4 mr-1" />
+              <Button
+                variant="default"
+                onClick={openCreateModal}
+                aria-label="Create a new prompt"
+              >
+                <Plus className="w-4 h-4" />
                 New Prompt
               </Button>
             </div>
@@ -321,8 +330,12 @@ export default function Home() {
                         Create your first prompt to get started.
                       </p>
                     </div>
-                    <Button variant="primary" onClick={openCreateModal}>
-                      <Plus className="w-4 h-4 mr-2" />
+                    <Button
+                      variant="default"
+                      onClick={openCreateModal}
+                      aria-label="Create your first prompt"
+                    >
+                      <Plus className="w-4 h-4" />
                       Create Your First Prompt
                     </Button>
                   </div>
@@ -369,27 +382,38 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Modals */}
-      <Modal
-        isOpen={modalType === "create" || modalType === "edit"}
-        onClose={closeModal}
-        title={modalType === "create" ? "Create New Prompt" : "Edit Prompt"}
-        size="half"
+      {/* Create/Edit Dialog */}
+      <Dialog
+        open={modalType === "create" || modalType === "edit"}
+        onOpenChange={(open) => {
+          if (!open) closeModal();
+        }}
       >
-        <PromptForm
-          prompt={selectedPrompt || undefined}
-          onSubmit={handlePromptSubmit}
-          onCancel={closeModal}
-        />
-      </Modal>
+        <DialogContent className="sm:max-w-[50vw]">
+          <DialogHeader>
+            <DialogTitle>
+              {modalType === "create" ? "Create New Prompt" : "Edit Prompt"}
+            </DialogTitle>
+          </DialogHeader>
+          <PromptForm
+            prompt={selectedPrompt || undefined}
+            onSubmit={handlePromptSubmit}
+            onCancel={closeModal}
+          />
+        </DialogContent>
+      </Dialog>
 
-      <Modal
-        isOpen={modalType === "delete"}
-        onClose={closeModal}
-        title="Delete Prompt"
-        size="sm"
+      {/* Delete Dialog */}
+      <Dialog
+        open={modalType === "delete"}
+        onOpenChange={(open) => {
+          if (!open) closeModal();
+        }}
       >
-        <div className="p-6">
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete Prompt</DialogTitle>
+          </DialogHeader>
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
               <Trash2 className="w-5 h-5 text-red-600" />
@@ -398,22 +422,19 @@ export default function Home() {
               <h3 className="text-lg font-medium text-gray-900">
                 Delete &ldquo;{selectedPrompt?.title}&rdquo;
               </h3>
-              <p className="text-sm text-gray-500">
-                This action cannot be undone.
-              </p>
+              <p className="text-sm text-gray-500">This action cannot be undone.</p>
             </div>
           </div>
-
-          <div className="flex justify-end space-x-3">
-            <Button variant="ghost" onClick={closeModal}>
+          <DialogFooter>
+            <Button variant="outline" onClick={closeModal}>
               Cancel
             </Button>
-            <Button variant="danger" onClick={handlePromptDelete}>
+            <Button variant="destructive" onClick={handlePromptDelete}>
               Delete
             </Button>
-          </div>
-        </div>
-      </Modal>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

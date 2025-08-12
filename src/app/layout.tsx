@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
-import { ToastProvider } from "@/contexts/ToastContext";
 import { PromptProvider } from "@/contexts/PromptContext";
-import { ToastContainer } from "@/components/UI/Toast";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +31,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen`}
       >
-        <ToastProvider>
-          <PromptProvider>
-            {children}
-            <ToastContainer />
-          </PromptProvider>
-        </ToastProvider>
+        <PromptProvider>
+          {children}
+          <Toaster />
+        </PromptProvider>
         <SpeedInsights />
       </body>
     </html>
