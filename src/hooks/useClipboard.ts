@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { copyToClipboard } from '../utils/helpers';
+import { useState } from "react";
+import { copyToClipboard } from "@/utils/helpers";
 
 interface UseClipboardReturn {
   copied: boolean;

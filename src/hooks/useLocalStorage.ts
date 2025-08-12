@@ -1,23 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 type SetValue<T> = (value: T | ((prevValue: T) => T)) => void;
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === "undefined") return initialValue;
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T
+): [T, SetValue<T>] {
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const [mounted, setMounted] = useState(false);
+
+  // Initialize from localStorage after component mounts
+  useEffect(() => {
+    setMounted(true);
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (item) {
+        setStoredValue(JSON.parse(item));
+      }
     } catch (error) {
-      return initialValue;
+      console.error(`Error reading localStorage key "${key}":`, error);
     }
-  });
+  }, [key]);
 
   const setValue: SetValue<T> = (value) => {
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
-      if (typeof window !== "undefined") {
+      if (mounted && typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
@@ -25,5 +35,6 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T
     }
   };
 
-  return [storedValue, setValue];
+  // Return initialValue until mounted to prevent hydration mismatch
+  return [mounted ? storedValue : initialValue, setValue];
 }
