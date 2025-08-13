@@ -179,15 +179,7 @@ npm version $NEW_VERSION --no-git-tag-version
 if [ -f "CHANGELOG.md" ]; then
     print_info "Updating CHANGELOG.md with release date..."
     TODAY=$(date +"%Y-%m-%d")
-    # Replace [Unreleased] or existing date with current date for the version
     sed -i "s/## \[$NEW_VERSION\] - [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/## [$NEW_VERSION] - $TODAY/" CHANGELOG.md
-    sed -i "s/## \[$NEW_VERSION\] - Unreleased/## [$NEW_VERSION] - $TODAY/" CHANGELOG.md
-    
-    # Add new [Unreleased] section if it doesn't exist
-    if ! grep -q "## \[Unreleased\]" CHANGELOG.md; then
-        # Add [Unreleased] section after the first ## heading
-        sed -i "1,/^## /{ /^## /a\\\n## [Unreleased]\n\n### Planned Features\n- Additional improvements and features\n" CHANGELOG.md
-    fi
 fi
 
 # Update README.md version badge if it exists

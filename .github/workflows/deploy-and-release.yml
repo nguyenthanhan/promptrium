@@ -67,7 +67,7 @@ jobs:
 
       - name: Extract version from tag
         id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
       - name: Get previous tag
         id: previous_tag
@@ -80,7 +80,7 @@ jobs:
             PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
           fi
 
-          echo "tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+          echo "tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Extract changelog content
         id: changelog
@@ -100,7 +100,7 @@ jobs:
             echo "changelog_content<<EOF"
             echo "$CHANGELOG_CONTENT"
             echo "EOF"
-          } >> $GITHUB_OUTPUT
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: actions/github-script@v7

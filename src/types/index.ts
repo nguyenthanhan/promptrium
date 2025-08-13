@@ -16,14 +16,6 @@ export interface Settings {
   last_backup: number;
 }
 
-export interface Toast {
-  id: string;
-  type: "success" | "error" | "info" | "warning";
-  title: string;
-  message?: string;
-  duration?: number;
-}
-
 export type ModalType =
   | "create"
   | "edit"
@@ -64,13 +56,6 @@ export interface PromptContextType {
   exportData: () => void;
   importData: (file: File) => Promise<void>;
   clearAllData: () => void;
-}
-
-export interface ToastContextType {
-  toasts: Toast[];
-  addToast: (toast: Omit<Toast, "id">) => void;
-  removeToast: (id: string) => void;
-  clearToasts: () => void;
 }
 
 export interface PromptCardProps {
@@ -115,16 +100,7 @@ export interface ModalProps {
   size?: "sm" | "md" | "lg" | "xl" | "half" | "full";
 }
 
-export interface ButtonProps {
-  children: React.ReactNode;
-  variant?: "primary" | "secondary" | "danger" | "ghost";
-  size?: "sm" | "md" | "lg";
-  disabled?: boolean;
-  loading?: boolean;
-  onClick?: () => void;
-  type?: "button" | "submit" | "reset";
-  className?: string;
-}
+// ButtonProps is defined in @/components/ui/button
 
 export interface InputProps {
   label?: string;

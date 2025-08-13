@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { SearchBarProps } from "@/types";
 import { Search, X } from "lucide-react";
 import { debounceString } from "@/utils/helpers";
@@ -10,7 +10,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
 }) => {
   const [localValue, setLocalValue] = useState(value);
-  const debouncedOnChange = debounceString(onChange, 300);
+
+  const debouncedOnChange = useMemo(
+    () => debounceString(onChange, 300),
+    [onChange]
+  );
 
   useEffect(() => setLocalValue(value), [value]);
 

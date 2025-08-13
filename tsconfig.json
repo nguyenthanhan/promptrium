@@ -28,10 +28,9 @@
       "@/utils/*": ["./src/utils/*"],
       "@/app/*": ["./src/app/*"],
       "@/styles/*": ["./src/styles/*"],
-      "@/lib/*": ["./src/lib/*"],
       "@/constants/*": ["./src/constants/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "src/components/UI/**"]
+  "exclude": ["node_modules"]
 }

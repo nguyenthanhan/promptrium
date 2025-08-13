@@ -33,7 +33,7 @@ const defaultSettings: Settings = {
 export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { toast } = useToast();
+  const { success, error } = useToast();
   const [mounted, setMounted] = useState(false);
 
   const [prompts, setPrompts] = useLocalStorage<Prompt[]>(
@@ -115,10 +115,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     (promptData: PromptFormData) => {
       const validation = validatePrompt(promptData);
       if (!validation.isValid) {
-        toast({
-          title: "Validation failed",
-          description: validation.errors.join(", "),
-        });
+        error("Validation failed", validation.errors.join(", "));
         return;
       }
 
@@ -127,7 +124,9 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
         title: promptData.title.trim(),
         content: promptData.content.trim(),
         description: promptData.description.trim(),
-        tags: promptData.tags.filter((tag) => tag.trim().length > 0),
+        tags: Array.from(
+          new Set(promptData.tags.map((t) => t.trim()).filter(Boolean))
+        ),
         created_at: Date.now(),
         updated_at: Date.now(),
         usage_count: 0,
@@ -135,19 +134,16 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
       };
 
       setPrompts((prev) => [...prev, newPrompt]);
-      toast({ title: "Prompt created successfully!" });
+      success("Prompt created successfully!");
     },
-    [setPrompts, toast]
+    [setPrompts]
   );
 
   const updatePrompt = useCallback(
     (id: string, promptData: PromptFormData) => {
       const validation = validatePrompt(promptData);
       if (!validation.isValid) {
-        toast({
-          title: "Validation failed",
-          description: validation.errors.join(", "),
-        });
+        error("Validation failed", validation.errors.join(", "));
         return;
       }
 
@@ -159,25 +155,27 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
                 title: promptData.title.trim(),
                 content: promptData.content.trim(),
                 description: promptData.description.trim(),
-                tags: promptData.tags.filter((tag) => tag.trim().length > 0),
+                tags: Array.from(
+                  new Set(promptData.tags.map((t) => t.trim()).filter(Boolean))
+                ),
                 updated_at: Date.now(),
               }
             : prompt
         )
       );
 
-      toast({ title: "Prompt updated successfully!" });
+      success("Prompt updated successfully!");
     },
-    [setPrompts, toast]
+    [setPrompts]
   );
 
   const deletePrompt = useCallback(
     (id: string) => {
       setPrompts((prev) => prev.filter((prompt) => prompt.id !== id));
       if (selectedPrompt?.id === id) setSelectedPrompt(null);
-      toast({ title: "Prompt deleted successfully!" });
+      success("Prompt deleted successfully!");
     },
-    [setPrompts, selectedPrompt, toast]
+    [setPrompts, selectedPrompt]
   );
 
   const toggleFavorite = useCallback(
@@ -251,8 +249,8 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     downloadFile(jsonData, filename, "application/json");
 
     setSettings((prev) => ({ ...prev, last_backup: Date.now() }));
-    toast({ title: "Data exported successfully!" });
-  }, [prompts, settings, setSettings, toast]);
+    success("Data exported successfully!");
+  }, [prompts, settings, setSettings]);
 
   const handleImportData = useCallback(
     async (file: File) => {
@@ -270,17 +268,14 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
           setSettings((prev) => ({ ...prev, ...data.settings }));
         }
 
-        toast({ title: "Data imported successfully!" });
+        success("Data imported successfully!");
       } catch {
-        toast({
-          title: "Import failed",
-          description: "Please check the file format.",
-        });
+        error("Import failed", "Please check the file format.");
       } finally {
         setIsLoading(false);
       }
     },
-    [setPrompts, setSettings, toast]
+    [setPrompts, setSettings]
   );
 
   const clearAllData = useCallback(() => {
@@ -290,8 +285,8 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     setSearchQuery("");
     setSelectedTags([]);
     setShowFavorites(false);
-    toast({ title: "All data cleared successfully!" });
-  }, [setPrompts, setSettings, toast]);
+    success("All data cleared successfully!");
+  }, [setPrompts, setSettings]);
 
   const contextValue: PromptContextType = {
     prompts,

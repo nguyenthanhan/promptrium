@@ -55,8 +55,12 @@
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
     "input-otp": "1.4.1",
+    "lucide-react": "^0.539.0",
+    "next": "15.4.6",
     "next-themes": "^0.4.4",
+    "react": "19.1.0",
     "react-day-picker": "8.10.1",
+    "react-dom": "19.1.0",
     "react-hook-form": "^7.54.1",
     "react-resizable-panels": "^2.1.7",
     "recharts": "2.15.0",
@@ -64,13 +68,9 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.179.1",
+    "uuid": "^11.1.0",
     "vaul": "^0.9.6",
-    "zod": "^3.24.1",
-    "lucide-react": "^0.539.0",
-    "next": "15.4.6",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "uuid": "^11.1.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -80,6 +80,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
