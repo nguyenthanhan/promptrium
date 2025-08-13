@@ -29,7 +29,7 @@ function extractChangelog(version) {
       `(^## \\[${cleanVersion.replace(
         /\./g,
         "\\."
-      )}\\])(?: - \\d{4}-\\d{2}-\\d{2})?\\n[\\s\\S]*?)(?=\\n## |\\n---|$)`,
+      )}\\])(?: - \\d{4}-\\d{2}-\\d{2})?\\n([\\s\\S]*?)(?=\\n## |\\n---|$)`,
       "im"
     );
 
@@ -37,7 +37,7 @@ function extractChangelog(version) {
 
     if (match) {
       const header = match[1];
-      const content = match[2];
+      const content = match[2] || "";
 
       // Clean up the content - remove extra blank lines and normalize spacing
       const cleanedContent = content
@@ -77,31 +77,6 @@ const version = process.argv[2];
 if (!version) {
   console.error("Usage: node scripts/extract-changelog.js <version>");
   console.error("Example: node scripts/extract-changelog.js 1.0.0");
-  process.exit(1);
-}
-
-// Fast-fail check: verify the requested version exists in CHANGELOG.md
-try {
-  const changelogPath = path.join(process.cwd(), "CHANGELOG.md");
-
-  if (!fs.existsSync(changelogPath)) {
-    console.error("Error: CHANGELOG.md not found");
-    process.exit(1);
-  }
-
-  const changelog = fs.readFileSync(changelogPath, "utf8");
-  const cleanVersion = version.replace(/^v/, "");
-  const versionHeaderPattern = new RegExp(
-    `^## \\[${cleanVersion.replace(/\./g, "\\.")}\\]`,
-    "m"
-  );
-
-  if (!versionHeaderPattern.test(changelog)) {
-    console.error(`Error: version '${cleanVersion}' not found in CHANGELOG.md`);
-    process.exit(1);
-  }
-} catch (error) {
-  console.error("Error checking CHANGELOG.md:", error.message);
   process.exit(1);
 }
 

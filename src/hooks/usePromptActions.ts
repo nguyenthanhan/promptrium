@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { Prompt, PromptFormData } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
 import { SUCCESS_MESSAGES, ERROR_MESSAGES } from "@/constants";
+import { copyToClipboard } from "@/utils/helpers";
 
 interface UsePromptActionsProps {
   addPrompt: (prompt: PromptFormData) => void;
@@ -95,28 +96,48 @@ export const usePromptActions = ({
   const handleCopyPrompt = useCallback(
     async (prompt: Prompt) => {
       try {
-        // Copy prompt content to clipboard
-        await navigator.clipboard.writeText(prompt.content);
+        // Copy prompt content to clipboard using shared helper
+        const success = await copyToClipboard(prompt.content);
 
-        // Increment usage count
-        incrementUsage(prompt.id);
+        if (success) {
+          // Increment usage count
+          incrementUsage(prompt.id);
 
-        toast({
-          title: "Success",
-          description: SUCCESS_MESSAGES.PROMPT_COPIED,
-        });
+          toast({
+            title: "Success",
+            description: SUCCESS_MESSAGES.PROMPT_COPIED,
+          });
+        } else {
+          // Show copy failed message with non-destructive variant
+          toast({
+            title: "Copy Failed",
+            description: ERROR_MESSAGES.OPERATIONS.COPY_FAILED,
+          });
+
+          // Still try to increment usage count
+          try {
+            incrementUsage(prompt.id);
+          } catch (usageError) {
+            console.error("Failed to update usage count:", usageError);
+            toast({
+              title: "Error",
+              description: ERROR_MESSAGES.OPERATIONS.USAGE_COUNT_UPDATE_FAILED,
+              variant: "destructive",
+            });
+          }
+        }
       } catch (error) {
         console.error("Failed to copy prompt:", error);
 
-        // Still try to increment usage count even if clipboard fails
+        // Show copy failed message with non-destructive variant
+        toast({
+          title: "Copy Failed",
+          description: ERROR_MESSAGES.OPERATIONS.COPY_FAILED,
+        });
+
+        // Still try to increment usage count
         try {
           incrementUsage(prompt.id);
-          toast({
-            title: "Warning",
-            description:
-              "Usage count updated, but failed to copy to clipboard.",
-            variant: "destructive",
-          });
         } catch (usageError) {
           console.error("Failed to update usage count:", usageError);
           toast({

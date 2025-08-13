@@ -235,12 +235,20 @@ const PromptCardList: React.FC<PromptCardProps> = memo(
               size="sm"
               onClick={handleCopy}
               className={copied ? "text-green-500" : ""}
-              aria-label="Copy prompt content"
+              aria-label={
+                copied ? "Copied to clipboard" : "Copy prompt content"
+              }
             >
               {copied ? (
-                <CheckCircle className="w-4 h-4" />
+                <>
+                  <CheckCircle className="w-4 h-4 mr-1" />
+                  Copied!
+                </>
               ) : (
-                <Copy className="w-4 h-4" />
+                <>
+                  <Copy className="w-4 h-4 mr-1" />
+                  Copy
+                </>
               )}
             </Button>
             <Button

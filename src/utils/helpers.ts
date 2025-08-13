@@ -1,4 +1,5 @@
 import { Prompt } from "@/types";
+import { VALIDATION, ERROR_MESSAGES } from "@/constants";
 
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -56,10 +57,49 @@ export const validatePrompt = (
   prompt: Partial<Prompt>
 ): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
-  if (!prompt.title || prompt.title.trim().length === 0)
-    errors.push("Title is required");
-  if (!prompt.content || prompt.content.trim().length === 0)
-    errors.push("Content is required");
+
+  // Normalize and validate title
+  const title = prompt.title?.trim() || "";
+  if (!title) {
+    errors.push(ERROR_MESSAGES.VALIDATION.TITLE_REQUIRED);
+  } else if (title.length < VALIDATION.TITLE.MIN_LENGTH) {
+    errors.push(ERROR_MESSAGES.VALIDATION.TITLE_TOO_SHORT);
+  } else if (title.length > VALIDATION.TITLE.MAX_LENGTH) {
+    errors.push(ERROR_MESSAGES.VALIDATION.TITLE_TOO_LONG);
+  }
+
+  // Normalize and validate content
+  const content = prompt.content?.trim() || "";
+  if (!content) {
+    errors.push(ERROR_MESSAGES.VALIDATION.CONTENT_REQUIRED);
+  } else if (content.length < VALIDATION.CONTENT.MIN_LENGTH) {
+    errors.push(ERROR_MESSAGES.VALIDATION.CONTENT_TOO_SHORT);
+  }
+
+  // Normalize and validate description
+  const description = prompt.description?.trim() || "";
+  if (description && description.length > VALIDATION.DESCRIPTION.MAX_LENGTH) {
+    errors.push(ERROR_MESSAGES.VALIDATION.DESCRIPTION_TOO_LONG);
+  }
+
+  // Normalize and validate tags
+  const tags = (prompt.tags || [])
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0);
+
+  // Check tag count
+  if (tags.length > VALIDATION.TAGS.MAX_COUNT) {
+    errors.push(ERROR_MESSAGES.VALIDATION.TAGS_TOO_MANY);
+  }
+
+  // Check individual tag lengths
+  for (const tag of tags) {
+    if (tag.length > VALIDATION.TAGS.MAX_LENGTH) {
+      errors.push(ERROR_MESSAGES.VALIDATION.TAGS_TOO_LONG);
+      break; // Only show this error once
+    }
+  }
+
   return { isValid: errors.length === 0, errors };
 };
 
@@ -100,4 +140,8 @@ export const debounceString = (
     clearTimeout(timeout);
     timeout = setTimeout(() => func(value), wait);
   };
+};
+
+export const deduplicateTags = (tags: string[]): string[] => {
+  return Array.from(new Set(tags.map((tag) => tag.trim()).filter(Boolean)));
 };

@@ -9,7 +9,7 @@ interface UseClipboardReturn {
 
 export function useClipboard(resetDelay: number = 2000): UseClipboardReturn {
   const [copied, setCopied] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clear = () => {
     if (timeoutRef.current) {

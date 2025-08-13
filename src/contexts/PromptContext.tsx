@@ -10,7 +10,12 @@ import React, {
 } from "react";
 import { Prompt, Settings, PromptContextType, PromptFormData } from "@/types";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { searchPrompts, downloadFile, validatePrompt } from "@/utils/helpers";
+import {
+  searchPrompts,
+  downloadFile,
+  validatePrompt,
+  deduplicateTags,
+} from "@/utils/helpers";
 import { useToast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -136,9 +141,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
         title: promptData.title.trim(),
         content: promptData.content.trim(),
         description: promptData.description.trim(),
-        tags: Array.from(
-          new Set(promptData.tags.map((t) => t.trim()).filter(Boolean))
-        ),
+        tags: deduplicateTags(promptData.tags),
         created_at: Date.now(),
         updated_at: Date.now(),
         usage_count: 0,
@@ -170,9 +173,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
                 title: promptData.title.trim(),
                 content: promptData.content.trim(),
                 description: promptData.description.trim(),
-                tags: Array.from(
-                  new Set(promptData.tags.map((t) => t.trim()).filter(Boolean))
-                ),
+                tags: deduplicateTags(promptData.tags),
                 updated_at: Date.now(),
               }
             : prompt

@@ -35,14 +35,6 @@ export const DEFAULT_SETTINGS = {
   VIEW_MODE: "grid",
 } as const;
 
-// Sort options
-export const SORT_OPTIONS = [
-  { key: "updated", label: "Last Updated" },
-  { key: "created", label: "Created Date" },
-  { key: "name", label: "Name" },
-  { key: "usage", label: "Usage Count" },
-] as const;
-
 // Sort keys
 export const SORT_KEYS = {
   UPDATED: "updated",
@@ -50,6 +42,17 @@ export const SORT_KEYS = {
   NAME: "name",
   USAGE: "usage",
 } as const;
+
+// Sort options
+export const SORT_OPTIONS = [
+  { key: SORT_KEYS.UPDATED, label: "Last Updated" },
+  { key: SORT_KEYS.CREATED, label: "Created Date" },
+  { key: SORT_KEYS.NAME, label: "Name" },
+  { key: SORT_KEYS.USAGE, label: "Usage Count" },
+] as const satisfies ReadonlyArray<{
+  key: (typeof SORT_KEYS)[keyof typeof SORT_KEYS];
+  label: string;
+}>;
 
 // Sort order
 export const SORT_ORDER = {
@@ -72,6 +75,7 @@ export const ERROR_MESSAGES = {
     TITLE_TOO_LONG: `Title must be less than ${VALIDATION.TITLE.MAX_LENGTH} characters`,
     CONTENT_REQUIRED: "Content is required",
     CONTENT_TOO_SHORT: `Content must be at least ${VALIDATION.CONTENT.MIN_LENGTH} characters`,
+    DESCRIPTION_TOO_LONG: `Description must be less than ${VALIDATION.DESCRIPTION.MAX_LENGTH} characters`,
     TAGS_TOO_LONG: `Tag must be less than ${VALIDATION.TAGS.MAX_LENGTH} characters`,
     TAGS_TOO_MANY: `Maximum ${VALIDATION.TAGS.MAX_COUNT} tags allowed`,
   },
