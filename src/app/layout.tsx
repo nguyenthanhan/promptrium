@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
-import { ToastProvider } from '../contexts/ToastContext';
-import { PromptProvider } from '../contexts/PromptContext';
-import { ToastContainer } from '../components/UI/Toast';
+import { PromptProvider } from "@/contexts/PromptContext";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Promptrium - AI Prompt Manager",
-  description: "Offline web application to manage, store and reuse AI prompts efficiently",
+  description:
+    "Offline web application to manage, store and reuse AI prompts efficiently",
 };
 
 export default function RootLayout({
@@ -27,13 +28,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen`}>
-        <ToastProvider>
-          <PromptProvider>
-            {children}
-            <ToastContainer />
-          </PromptProvider>
-        </ToastProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen`}
+      >
+        <PromptProvider>
+          {children}
+          <Toaster />
+        </PromptProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

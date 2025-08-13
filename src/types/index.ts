@@ -11,21 +11,19 @@ export interface Prompt {
 }
 
 export interface Settings {
-  theme: 'light' | 'dark';
-  view_mode: 'grid' | 'list';
+  theme: "light" | "dark";
+  view_mode: "grid" | "list";
   last_backup: number;
 }
 
-export interface Toast {
-  id: string;
-  type: 'success' | 'error' | 'info' | 'warning';
-  title: string;
-  message?: string;
-  duration?: number;
-}
-
-export type ModalType = 'create' | 'edit' | 'delete' | 'import' | 'export' | null;
-export type ViewMode = 'grid' | 'list';
+export type ModalType =
+  | "create"
+  | "edit"
+  | "delete"
+  | "import"
+  | "export"
+  | null;
+export type ViewMode = "grid" | "list";
 
 export interface PromptFormData {
   title: string;
@@ -40,32 +38,24 @@ export interface PromptContextType {
   filteredPrompts: Prompt[];
   selectedPrompt: Prompt | null;
   isLoading: boolean;
-  error: string | null;
-  
+
   addPrompt: (prompt: PromptFormData) => void;
   updatePrompt: (id: string, prompt: PromptFormData) => void;
   deletePrompt: (id: string) => void;
   toggleFavorite: (id: string) => void;
   incrementUsage: (id: string) => void;
   selectPrompt: (prompt: Prompt | null) => void;
-  
+
   updateSettings: (settings: Partial<Settings>) => void;
-  
+
   setSearchQuery: (query: string) => void;
   setSelectedTags: (tags: string[]) => void;
   setShowFavorites: (show: boolean) => void;
-  setSortOptions: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
-  
+  setSortOptions: (sortBy: string, sortOrder: "asc" | "desc") => void;
+
   exportData: () => void;
   importData: (file: File) => Promise<void>;
   clearAllData: () => void;
-}
-
-export interface ToastContextType {
-  toasts: Toast[];
-  addToast: (toast: Omit<Toast, 'id'>) => void;
-  removeToast: (id: string) => void;
-  clearToasts: () => void;
 }
 
 export interface PromptCardProps {
@@ -98,8 +88,8 @@ export interface FilterPanelProps {
   showFavorites: boolean;
   onFavoritesChange: (show: boolean) => void;
   sortBy: string;
-  sortOrder: 'asc' | 'desc';
-  onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
+  sortOrder: "asc" | "desc";
+  onSortChange: (sortBy: string, sortOrder: "asc" | "desc") => void;
 }
 
 export interface ModalProps {
@@ -107,19 +97,10 @@ export interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'half' | 'full';
+  size?: "sm" | "md" | "lg" | "xl" | "half" | "full";
 }
 
-export interface ButtonProps {
-  children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
-  loading?: boolean;
-  onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
-  className?: string;
-}
+// ButtonProps is defined in @/components/ui/button
 
 export interface InputProps {
   label?: string;
@@ -129,7 +110,7 @@ export interface InputProps {
   required?: boolean;
   error?: string;
   disabled?: boolean;
-  type?: 'text' | 'email' | 'password' | 'number' | 'textarea';
+  type?: "text" | "email" | "password" | "number" | "textarea";
   rows?: number;
   className?: string;
 }

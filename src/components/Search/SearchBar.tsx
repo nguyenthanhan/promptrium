@@ -1,11 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { SearchBarProps } from '../../types';
-import { Search, X } from 'lucide-react';
-import { debounce } from '../../utils/helpers';
+import React, { useEffect, useMemo, useState } from "react";
+import { SearchBarProps } from "@/types";
+import { Search, X } from "lucide-react";
+import { debounceString } from "@/utils/helpers";
 
-const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, placeholder = 'Search prompts...', className = '' }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  value,
+  onChange,
+  placeholder = "Search prompts...",
+  className = "",
+}) => {
   const [localValue, setLocalValue] = useState(value);
-  const debouncedOnChange = debounce(onChange, 300);
+
+  const debouncedOnChange = useMemo(
+    () => debounceString(onChange, 300),
+    [onChange]
+  );
 
   useEffect(() => setLocalValue(value), [value]);
 
@@ -16,8 +25,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, placeholder = 'S
   };
 
   const handleClear = () => {
-    setLocalValue('');
-    onChange('');
+    setLocalValue("");
+    onChange("");
   };
 
   return (
@@ -33,7 +42,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, placeholder = 'S
         className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
       {localValue && (
-        <button onClick={handleClear} className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+        <button
+          onClick={handleClear}
+          className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+        >
           <X className="h-5 w-5" />
         </button>
       )}

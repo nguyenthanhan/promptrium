@@ -1,0 +1,15 @@
+{
+  "root": true,
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": true,
+        "alwaysTryTypes": true
+      },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
+}
