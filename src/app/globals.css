@@ -204,27 +204,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@keyframes caretBlink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
-}
-
-.animate-caret-blink {
-  animation: caretBlink 1s infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-caret-blink {
-    animation: none !important;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
