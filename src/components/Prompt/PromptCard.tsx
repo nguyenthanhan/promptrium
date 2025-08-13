@@ -67,9 +67,9 @@ const PromptCardGrid: React.FC<PromptCardProps> = memo(
 
         {prompt.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-3">
-            {prompt.tags.slice(0, 2).map((tag) => (
+            {prompt.tags.slice(0, 2).map((tag, i) => (
               <span
-                key={tag}
+                key={`${tag}-${i}`}
                 className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full"
               >
                 <Tag className="w-3 h-3 mr-1" />
@@ -194,9 +194,9 @@ const PromptCardList: React.FC<PromptCardProps> = memo(
 
             {prompt.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
-                {prompt.tags.slice(0, 3).map((tag) => (
+                {prompt.tags.slice(0, 3).map((tag, i) => (
                   <span
-                    key={tag}
+                    key={`${tag}-${i}`}
                     className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full"
                   >
                     <Tag className="w-3 h-3 mr-1" />

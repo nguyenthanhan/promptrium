@@ -13,6 +13,15 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { searchPrompts, downloadFile, validatePrompt } from "@/utils/helpers";
 import { useToast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
+import {
+  STORAGE_KEYS,
+  SUCCESS_MESSAGES,
+  ERROR_MESSAGES,
+  EXPORT,
+  SORT_KEYS,
+  SORT_ORDER,
+  DEFAULT_SETTINGS,
+} from "@/constants";
 
 const PromptContext = createContext<PromptContextType | undefined>(undefined);
 
@@ -25,8 +34,8 @@ export const usePrompts = () => {
 };
 
 const defaultSettings: Settings = {
-  theme: "light",
-  view_mode: "grid",
+  theme: DEFAULT_SETTINGS.THEME,
+  view_mode: DEFAULT_SETTINGS.VIEW_MODE,
   last_backup: Date.now(),
 };
 
@@ -37,11 +46,11 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
   const [mounted, setMounted] = useState(false);
 
   const [prompts, setPrompts] = useLocalStorage<Prompt[]>(
-    "promptrium_prompts",
+    STORAGE_KEYS.PROMPTS,
     []
   );
   const [settings, setSettings] = useLocalStorage<Settings>(
-    "promptrium_settings",
+    STORAGE_KEYS.SETTINGS,
     defaultSettings
   );
 
@@ -51,8 +60,8 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showFavorites, setShowFavorites] = useState(false);
-  const [sortBy, setSortBy] = useState<string>("updated");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortBy, setSortBy] = useState<string>(SORT_KEYS.UPDATED);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">(SORT_ORDER.DESC);
 
   // Set mounted state after component mounts to prevent hydration issues
   useEffect(() => {
@@ -82,22 +91,22 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     filtered.sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
-        case "name":
+        case SORT_KEYS.NAME:
           comparison = a.title.localeCompare(b.title);
           break;
-        case "created":
+        case SORT_KEYS.CREATED:
           comparison = a.created_at - b.created_at;
           break;
-        case "updated":
+        case SORT_KEYS.UPDATED:
           comparison = a.updated_at - b.updated_at;
           break;
-        case "usage":
+        case SORT_KEYS.USAGE:
           comparison = a.usage_count - b.usage_count;
           break;
         default:
           comparison = a.updated_at - b.updated_at;
       }
-      return sortOrder === "asc" ? comparison : -comparison;
+      return sortOrder === SORT_ORDER.ASC ? comparison : -comparison;
     });
 
     return filtered;
@@ -115,7 +124,10 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     (promptData: PromptFormData) => {
       const validation = validatePrompt(promptData);
       if (!validation.isValid) {
-        error("Validation failed", validation.errors.join(", "));
+        error(
+          ERROR_MESSAGES.OPERATIONS.VALIDATION_FAILED,
+          validation.errors.join(", ")
+        );
         return;
       }
 
@@ -134,7 +146,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
       };
 
       setPrompts((prev) => [...prev, newPrompt]);
-      success("Prompt created successfully!");
+      success(SUCCESS_MESSAGES.PROMPT_CREATED);
     },
     [setPrompts]
   );
@@ -143,7 +155,10 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     (id: string, promptData: PromptFormData) => {
       const validation = validatePrompt(promptData);
       if (!validation.isValid) {
-        error("Validation failed", validation.errors.join(", "));
+        error(
+          ERROR_MESSAGES.OPERATIONS.VALIDATION_FAILED,
+          validation.errors.join(", ")
+        );
         return;
       }
 
@@ -164,7 +179,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       );
 
-      success("Prompt updated successfully!");
+      success(SUCCESS_MESSAGES.PROMPT_UPDATED);
     },
     [setPrompts]
   );
@@ -173,7 +188,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     (id: string) => {
       setPrompts((prev) => prev.filter((prompt) => prompt.id !== id));
       if (selectedPrompt?.id === id) setSelectedPrompt(null);
-      success("Prompt deleted successfully!");
+      success(SUCCESS_MESSAGES.PROMPT_DELETED);
     },
     [setPrompts, selectedPrompt]
   );
@@ -237,7 +252,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
         prompts,
         settings,
         exportDate: new Date().toISOString(),
-        version: "1.0.0",
+        version: EXPORT.VERSION,
       },
       null,
       2
@@ -246,10 +261,10 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     const filename = `promptrium-export-${
       new Date().toISOString().split("T")[0]
     }.json`;
-    downloadFile(jsonData, filename, "application/json");
+    downloadFile(jsonData, filename, EXPORT.MIME_TYPE);
 
     setSettings((prev) => ({ ...prev, last_backup: Date.now() }));
-    success("Data exported successfully!");
+    success(SUCCESS_MESSAGES.DATA_EXPORTED);
   }, [prompts, settings, setSettings]);
 
   const handleImportData = useCallback(
@@ -260,7 +275,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
         const data = JSON.parse(text);
 
         if (!data.prompts || !Array.isArray(data.prompts)) {
-          throw new Error("Invalid data format");
+          throw new Error(ERROR_MESSAGES.OPERATIONS.INVALID_DATA_FORMAT);
         }
 
         setPrompts(data.prompts);
@@ -268,9 +283,12 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
           setSettings((prev) => ({ ...prev, ...data.settings }));
         }
 
-        success("Data imported successfully!");
+        success(SUCCESS_MESSAGES.DATA_IMPORTED);
       } catch {
-        error("Import failed", "Please check the file format.");
+        error(
+          ERROR_MESSAGES.OPERATIONS.IMPORT_FAILED,
+          "Please check the file format."
+        );
       } finally {
         setIsLoading(false);
       }
@@ -285,7 +303,7 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     setSearchQuery("");
     setSelectedTags([]);
     setShowFavorites(false);
-    success("All data cleared successfully!");
+    success(SUCCESS_MESSAGES.ALL_DATA_CLEARED);
   }, [setPrompts, setSettings]);
 
   const contextValue: PromptContextType = {

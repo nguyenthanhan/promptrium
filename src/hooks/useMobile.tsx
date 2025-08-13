@@ -1,19 +1,40 @@
-import * as React from "react"
+import * as React from "react";
 
-const MOBILE_BREAKPOINT = 768
+const MOBILE_BREAKPOINT = 768;
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
+  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(
+    undefined
+  );
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
-    mql.addEventListener("change", onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
-  }, [])
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
 
-  return !!isMobile
+    const onChange = () => {
+      setIsMobile(mql.matches);
+    };
+
+    // Set initial state using matchMedia
+    setIsMobile(mql.matches);
+
+    // Add event listener with fallback for older Safari
+    if (mql.addEventListener) {
+      mql.addEventListener("change", onChange);
+    } else if (mql.addListener) {
+      // Fallback for older Safari
+      mql.addListener(onChange);
+    }
+
+    return () => {
+      // Remove event listener with fallback for older Safari
+      if (mql.removeEventListener) {
+        mql.removeEventListener("change", onChange);
+      } else if (mql.removeListener) {
+        // Fallback for older Safari
+        mql.removeListener(onChange);
+      }
+    };
+  }, []);
+
+  return !!isMobile;
 }

@@ -63,10 +63,22 @@ const PromptForm: React.FC<PromptFormProps> = ({
   const handleInputChange = (field: keyof PromptFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    }
+    // Clear field-specific error and submit error when user starts typing
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+
+      // Clear the specific field error
+      if (newErrors[field]) {
+        newErrors[field] = "";
+      }
+
+      // Clear submit error to allow resubmission
+      if (newErrors.submit) {
+        newErrors.submit = "";
+      }
+
+      return newErrors;
+    });
 
     // Real-time validation for title and content
     if (field === "title" || field === "content") {
@@ -149,9 +161,14 @@ const PromptForm: React.FC<PromptFormProps> = ({
     }
   };
 
-  const hasErrors = Object.keys(errors).length > 0;
-  const isFormValid =
-    formData.title.trim() && formData.content.trim() && !hasErrors;
+  const hasErrors = Object.entries(errors).some(
+    ([key, value]) => key !== "submit" && !!value
+  );
+  const isFormValid = !!(
+    formData.title.trim() &&
+    formData.content.trim() &&
+    !hasErrors
+  );
 
   return (
     <form onSubmit={handleSubmit} className="p-6 space-y-6" noValidate>

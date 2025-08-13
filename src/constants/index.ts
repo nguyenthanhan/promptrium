@@ -29,6 +29,12 @@ export const UI = {
   SKELETON_COUNT: 3,
 } as const;
 
+// Default settings
+export const DEFAULT_SETTINGS = {
+  THEME: "light",
+  VIEW_MODE: "grid",
+} as const;
+
 // Sort options
 export const SORT_OPTIONS = [
   { key: "updated", label: "Last Updated" },
@@ -37,10 +43,25 @@ export const SORT_OPTIONS = [
   { key: "usage", label: "Usage Count" },
 ] as const;
 
+// Sort keys
+export const SORT_KEYS = {
+  UPDATED: "updated",
+  CREATED: "created",
+  NAME: "name",
+  USAGE: "usage",
+} as const;
+
+// Sort order
+export const SORT_ORDER = {
+  ASC: "asc",
+  DESC: "desc",
+} as const;
+
 // Export constants
 export const EXPORT = {
   VERSION: "1.0.0",
   FILENAME_PREFIX: "promptrium-export-",
+  MIME_TYPE: "application/json",
 } as const;
 
 // Error messages
@@ -61,6 +82,10 @@ export const ERROR_MESSAGES = {
     COPY_FAILED: "Copy failed",
     IMPORT_FAILED: "Failed to import data. Please check the file format.",
     EXPORT_FAILED: "Failed to export data. Please try again.",
+    VALIDATION_FAILED: "Validation failed",
+    INVALID_DATA_FORMAT: "Invalid data format",
+    FAVORITE_STATUS_UPDATE_FAILED: "Failed to update favorite status.",
+    USAGE_COUNT_UPDATE_FAILED: "Failed to update usage count.",
   },
 } as const;
 
@@ -74,4 +99,5 @@ export const SUCCESS_MESSAGES = {
   DATA_IMPORTED: "Data imported successfully!",
   FAVORITE_UPDATED: "Favorite status updated!",
   USAGE_UPDATED: "Usage count updated!",
+  ALL_DATA_CLEARED: "All data cleared successfully!",
 } as const;

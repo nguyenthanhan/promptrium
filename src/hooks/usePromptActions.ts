@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { Prompt, PromptFormData } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
+import { SUCCESS_MESSAGES, ERROR_MESSAGES } from "@/constants";
 
 interface UsePromptActionsProps {
   addPrompt: (prompt: PromptFormData) => void;
@@ -25,12 +26,12 @@ export const usePromptActions = ({
         addPrompt(formData);
         toast({
           title: "Success",
-          description: "Prompt created successfully!",
+          description: SUCCESS_MESSAGES.PROMPT_CREATED,
         });
       } catch (error) {
         toast({
           title: "Error",
-          description: "Failed to create prompt. Please try again.",
+          description: ERROR_MESSAGES.OPERATIONS.CREATE_FAILED,
           variant: "destructive",
         });
       }
@@ -44,12 +45,12 @@ export const usePromptActions = ({
         updatePrompt(id, formData);
         toast({
           title: "Success",
-          description: "Prompt updated successfully!",
+          description: SUCCESS_MESSAGES.PROMPT_UPDATED,
         });
       } catch (error) {
         toast({
           title: "Error",
-          description: "Failed to update prompt. Please try again.",
+          description: ERROR_MESSAGES.OPERATIONS.UPDATE_FAILED,
           variant: "destructive",
         });
       }
@@ -63,12 +64,12 @@ export const usePromptActions = ({
         deletePrompt(id);
         toast({
           title: "Success",
-          description: "Prompt deleted successfully!",
+          description: SUCCESS_MESSAGES.PROMPT_DELETED,
         });
       } catch (error) {
         toast({
           title: "Error",
-          description: "Failed to delete prompt. Please try again.",
+          description: ERROR_MESSAGES.OPERATIONS.DELETE_FAILED,
           variant: "destructive",
         });
       }
@@ -83,7 +84,7 @@ export const usePromptActions = ({
       } catch (error) {
         toast({
           title: "Error",
-          description: "Failed to update favorite status.",
+          description: ERROR_MESSAGES.OPERATIONS.FAVORITE_STATUS_UPDATE_FAILED,
           variant: "destructive",
         });
       }
@@ -92,19 +93,38 @@ export const usePromptActions = ({
   );
 
   const handleCopyPrompt = useCallback(
-    (prompt: Prompt) => {
+    async (prompt: Prompt) => {
       try {
+        // Copy prompt content to clipboard
+        await navigator.clipboard.writeText(prompt.content);
+
+        // Increment usage count
         incrementUsage(prompt.id);
+
         toast({
           title: "Success",
-          description: "Prompt copied and usage count updated!",
+          description: SUCCESS_MESSAGES.PROMPT_COPIED,
         });
       } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to update usage count.",
-          variant: "destructive",
-        });
+        console.error("Failed to copy prompt:", error);
+
+        // Still try to increment usage count even if clipboard fails
+        try {
+          incrementUsage(prompt.id);
+          toast({
+            title: "Warning",
+            description:
+              "Usage count updated, but failed to copy to clipboard.",
+            variant: "destructive",
+          });
+        } catch (usageError) {
+          console.error("Failed to update usage count:", usageError);
+          toast({
+            title: "Error",
+            description: ERROR_MESSAGES.OPERATIONS.USAGE_COUNT_UPDATE_FAILED,
+            variant: "destructive",
+          });
+        }
       }
     },
     [incrementUsage, toast]

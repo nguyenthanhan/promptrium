@@ -4,7 +4,11 @@
   "settings": {
     "import/resolver": {
       "typescript": {
-        "project": true
+        "project": true,
+        "alwaysTryTypes": true
+      },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
   }

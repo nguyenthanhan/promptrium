@@ -1,5 +1,5 @@
 import { cn } from "@/utils/helpers";
-import * as React from "react";
+import React from "react";
 
 function Skeleton({
   className,
