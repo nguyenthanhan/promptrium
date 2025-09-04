@@ -171,7 +171,11 @@ const PromptForm: React.FC<PromptFormProps> = ({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 space-y-6" noValidate>
+    <form
+      onSubmit={handleSubmit}
+      className="px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6"
+      noValidate
+    >
       {/* Title Field */}
       <div className="space-y-2">
         <label
@@ -223,7 +227,7 @@ const PromptForm: React.FC<PromptFormProps> = ({
           value={formData.content}
           onChange={(e) => handleInputChange("content", e.target.value)}
           placeholder="Enter your prompt content here..."
-          rows={6}
+          rows={4}
           className={`w-full px-3 py-2 border rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
             errors.content
               ? "border-red-300 focus:ring-red-500"
@@ -352,19 +356,20 @@ const PromptForm: React.FC<PromptFormProps> = ({
       )}
 
       {/* Form Actions */}
-      <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-3 sm:pt-4 border-t border-gray-200">
         <Button
           type="button"
           variant="outline"
           onClick={onCancel}
           disabled={isLoading || isSubmitting}
+          className="w-full sm:w-auto"
         >
           Cancel
         </Button>
         <Button
           type="submit"
           disabled={!isFormValid || isLoading || isSubmitting}
-          className="min-w-[120px]"
+          className="w-full sm:w-auto sm:min-w-[120px]"
         >
           {isSubmitting ? (
             <Loading size="sm" variant="spinner" />

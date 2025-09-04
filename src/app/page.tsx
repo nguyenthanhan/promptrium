@@ -389,17 +389,19 @@ export default function Home() {
           if (!open) closeModal();
         }}
       >
-        <DialogContent className="sm:max-w-[50vw]">
-          <DialogHeader>
+        <DialogContent className="max-w-[95vw] sm:max-w-[85vw] md:max-w-[70vw] lg:max-w-[60vw] xl:max-w-[50vw] max-h-[90vh] flex flex-col p-0 [&>button]:z-20">
+          <DialogHeader className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6 py-4 rounded-t-lg">
             <DialogTitle>
               {modalType === "create" ? "Create New Prompt" : "Edit Prompt"}
             </DialogTitle>
           </DialogHeader>
-          <PromptForm
-            prompt={selectedPrompt || undefined}
-            onSubmit={handlePromptSubmit}
-            onCancel={closeModal}
-          />
+          <div className="flex-1 overflow-y-auto">
+            <PromptForm
+              prompt={selectedPrompt || undefined}
+              onSubmit={handlePromptSubmit}
+              onCancel={closeModal}
+            />
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -422,7 +424,9 @@ export default function Home() {
               <h3 className="text-lg font-medium text-gray-900">
                 Delete &ldquo;{selectedPrompt?.title}&rdquo;
               </h3>
-              <p className="text-sm text-gray-500">This action cannot be undone.</p>
+              <p className="text-sm text-gray-500">
+                This action cannot be undone.
+              </p>
             </div>
           </div>
           <DialogFooter>
