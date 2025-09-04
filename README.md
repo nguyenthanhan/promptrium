@@ -1,42 +1,154 @@
+# Promptrium 🚀
+
 [![Release and Deploy](https://github.com/nguyenthanhan/promptrium/workflows/Deploy%20and%20Release/badge.svg)](https://github.com/nguyenthanhan/promptrium/actions/workflows/deploy-and-release.yml)
 [![Deploy on Vercel](https://img.shields.io/badge/Deploy%20on-Vercel-black)](https://vercel.com/heimers-projects/promptrium)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Promptrium** is a modern, offline-first AI prompt management application that helps you organize, search, and reuse your AI prompts efficiently. Built with Next.js and TypeScript, it provides a beautiful, responsive interface for managing your prompt library.
 
-## Getting Started
+## ✨ Features
 
-First, run the development server:
+### 📝 **Prompt Management**
+
+- **Create, Edit & Delete**: Full CRUD operations for prompt management
+- **Rich Text Support**: Store detailed prompts with titles, content, and descriptions
+- **Tagging System**: Organize prompts with custom tags for better categorization
+- **Favorites**: Mark important prompts as favorites for quick access
+
+### 🔍 **Search & Discovery**
+
+- **Advanced Search**: Real-time search across prompt titles, content, and descriptions
+- **Tag Filtering**: Filter prompts by one or multiple tags
+- **Favorites Filter**: Quickly view only your favorite prompts
+- **Smart Sorting**: Sort by creation date, update date, name, or usage count
+
+### 📊 **Analytics & Tracking**
+
+- **Usage Statistics**: Track how often you use each prompt
+- **Creation & Update Timestamps**: Keep track of when prompts were created and modified
+- **Prompt Statistics**: View total prompts, favorites, and tag counts at a glance
+
+### 🎨 **User Experience**
+
+- **Dual View Modes**: Switch between grid and list views
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **One-Click Copy**: Copy prompts to clipboard with visual feedback
+- **Toast Notifications**: Immediate feedback for all user actions
+- **Loading States**: Smooth loading experience with skeleton screens
+
+### 💾 **Data Management**
+
+- **Local Storage**: All data stored locally in your browser (no server required)
+- **Import/Export**: Backup and restore your prompts via JSON files
+- **Data Validation**: Robust validation to ensure data integrity
+- **Offline First**: Works completely offline once loaded
+
+### 🔧 **Developer Experience**
+
+- **TypeScript**: Full type safety throughout the application
+- **Modern React**: Built with React 19 and modern hooks
+- **Component Architecture**: Well-structured, reusable components
+- **Performance Optimized**: Memoized components and efficient state management
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ (recommended: latest LTS)
+- pnpm (recommended) or npm/yarn
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/nguyenthanhan/promptrium.git
+   cd promptrium
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   pnpm install
+   # or
+   npm install
+   ```
+
+3. **Start the development server**
+
+   ```bash
+   pnpm dev
+   # or
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Available Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Development
+pnpm dev          # Start development server
+pnpm dev:turbo    # Start development server with Turbopack
+
+# Build & Deploy
+pnpm build        # Build for production
+pnpm start        # Start production server
+
+# Maintenance
+pnpm lint         # Run ESLint
+pnpm clean        # Clean build artifacts
+
+# Release Management
+pnpm release             # Create a new release
+pnpm release:patch       # Create a patch release
+pnpm release:minor       # Create a minor release
+pnpm release:major       # Create a major release
+pnpm changelog           # Extract changelog
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🤝 Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Contributions are welcome! Here's how you can help:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Make your changes**
+4. **Commit your changes**
+   ```bash
+   git commit -m 'Add some amazing feature'
+   ```
+5. **Push to the branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+6. **Open a Pull Request**
 
-## Learn More
+### Development Guidelines
 
-To learn more about Next.js, take a look at the following resources:
+- Follow the existing code style and conventions
+- Add TypeScript types for new features
+- Test your changes across different screen sizes
+- Update documentation as needed
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Deploy on Vercel
+## 🙏 Acknowledgments
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Built with [Next.js](https://nextjs.org/)
+- UI components from [shadcn/ui](https://ui.shadcn.com/)
+- Icons from [Lucide](https://lucide.dev/)
+- Fonts from [Vercel](https://vercel.com/font)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+**Made with ❤️ for the AI community**
