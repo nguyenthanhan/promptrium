@@ -6,11 +6,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { validatePrompt, deduplicateTags } from "@/utils/helpers";
 import { useToast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
-import {
-  STORAGE_KEYS,
-  SUCCESS_MESSAGES,
-  ERROR_MESSAGES,
-} from "@/constants";
+import { STORAGE_KEYS, SUCCESS_MESSAGES, ERROR_MESSAGES } from "@/constants";
 
 interface PromptDataContextType {
   prompts: Prompt[];
@@ -22,7 +18,9 @@ interface PromptDataContextType {
   setPrompts: React.Dispatch<React.SetStateAction<Prompt[]>>;
 }
 
-const PromptDataContext = createContext<PromptDataContextType | undefined>(undefined);
+const PromptDataContext = createContext<PromptDataContextType | undefined>(
+  undefined
+);
 
 export const usePromptData = () => {
   const context = useContext(PromptDataContext);
@@ -36,7 +34,10 @@ export const PromptDataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { success, error } = useToast();
-  const [prompts, setPrompts] = useLocalStorage<Prompt[]>(STORAGE_KEYS.PROMPTS, []);
+  const [prompts, setPrompts] = useLocalStorage<Prompt[]>(
+    STORAGE_KEYS.PROMPTS,
+    []
+  );
 
   const addPrompt = useCallback(
     (promptData: PromptFormData) => {
@@ -85,7 +86,6 @@ export const PromptDataProvider: React.FC<{ children: React.ReactNode }> = ({
                 ...prompt,
                 title: promptData.title.trim(),
                 content: promptData.content.trim(),
-                description: promptData.description.trim(),
                 tags: deduplicateTags(promptData.tags),
                 updated_at: Date.now(),
               }

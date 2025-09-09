@@ -111,7 +111,7 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
                   ? "lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
                   : settings.layout_density === "comfortable"
                   ? "lg:grid-cols-2 xl:grid-cols-3 gap-6"
-                  : "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-8"
+                  : "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8"
               }`
             : settings.layout_density === "compact"
             ? "space-y-3"

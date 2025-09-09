@@ -54,7 +54,10 @@ export const FormField: React.FC<FormFieldProps> = ({
         maxLength={maxLength}
       />
       {error && (
-        <p id={`${id}-error`} className="text-sm text-red-600 flex items-center">
+        <p
+          id={`${id}-error`}
+          className="text-sm text-red-600 flex items-center"
+        >
           <AlertCircle className="w-4 h-4 mr-1" />
           {error}
         </p>
@@ -105,24 +108,5 @@ export const ContentField: React.FC<{
     required
     type="textarea"
     rows={8}
-  />
-);
-
-export const DescriptionField: React.FC<{
-  value: string;
-  onChange: (value: string) => void;
-  disabled?: boolean;
-}> = ({ value, onChange, disabled }) => (
-  <FormField
-    id="description"
-    label="Description"
-    value={value}
-    onChange={onChange}
-    placeholder="Optional description of what this prompt does..."
-    disabled={disabled}
-    type="textarea"
-    rows={3}
-    maxLength={VALIDATION.DESCRIPTION.MAX_LENGTH}
-    showCharCount
   />
 );
