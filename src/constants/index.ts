@@ -33,6 +33,7 @@ export const UI = {
 export const DEFAULT_SETTINGS = {
   THEME: "light",
   VIEW_MODE: "grid",
+  LAYOUT_DENSITY: "comfortable",
 } as const;
 
 // Sort keys

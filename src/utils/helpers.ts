@@ -122,11 +122,39 @@ export const downloadFile = (
 export const copyToClipboard = async (text: string): Promise<boolean> => {
   try {
     if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
+      // Add timeout to prevent hanging on slow clipboard operations
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Clipboard timeout')), 1000);
+      });
+      
+      await Promise.race([
+        navigator.clipboard.writeText(text),
+        timeoutPromise
+      ]);
+      
       return true;
+    } else {
+      // Fallback method for non-secure contexts
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        const success = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        return success;
+      } catch {
+        document.body.removeChild(textArea);
+        return false;
+      }
     }
-    return false;
-  } catch {
+  } catch (error) {
+    console.warn('Copy to clipboard failed:', error);
     return false;
   }
 };

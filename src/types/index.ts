@@ -13,6 +13,7 @@ export interface Prompt {
 export interface Settings {
   theme: "light" | "dark";
   view_mode: "grid" | "list";
+  layout_density: "compact" | "comfortable" | "expanded";
   last_backup: number;
 }
 
@@ -24,6 +25,7 @@ export type ModalType =
   | "export"
   | null;
 export type ViewMode = "grid" | "list";
+export type LayoutDensity = "compact" | "comfortable" | "expanded";
 
 export interface PromptFormData {
   title: string;
@@ -61,6 +63,7 @@ export interface PromptContextType {
 export interface PromptCardProps {
   prompt: Prompt;
   viewMode: ViewMode;
+  layoutDensity: LayoutDensity;
   onEdit: (prompt: Prompt) => void;
   onDelete: (prompt: Prompt) => void;
   onCopy: (prompt: Prompt) => void;
@@ -70,7 +73,7 @@ export interface PromptCardProps {
 export interface PromptFormProps {
   prompt?: Prompt;
   onSubmit: (data: PromptFormData) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   isLoading?: boolean;
 }
 

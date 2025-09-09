@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { copyToClipboard } from "@/utils/helpers";
+import { clipboardManager } from "@/utils/clipboardManager";
 
 interface UseClipboardReturn {
   copied: boolean;
@@ -10,6 +10,7 @@ interface UseClipboardReturn {
 export function useClipboard(resetDelay: number = 2000): UseClipboardReturn {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   const clear = () => {
     if (timeoutRef.current) {
@@ -24,19 +25,49 @@ export function useClipboard(resetDelay: number = 2000): UseClipboardReturn {
   };
 
   const copy = async (text: string): Promise<boolean> => {
-    const success = await copyToClipboard(text);
-    if (success) {
-      setCopied(true);
-      // Clear any existing timeout before setting a new one
+    try {
+      // Clear any existing timeout first
       clear();
-      timeoutRef.current = setTimeout(() => setCopied(false), resetDelay);
+      
+      // Immediately set to false to ensure clean state
+      setCopied(false);
+      
+      // Use global clipboard manager to handle conflicts
+      const success = await clipboardManager.copy(text);
+      
+      if (success) {
+        setCopied(true);
+        timeoutRef.current = setTimeout(() => {
+          setCopied(false);
+        }, resetDelay);
+      } else {
+        // Ensure we're not stuck in copied state on failure
+        setCopied(false);
+      }
+      
+      return success;
+    } catch (error) {
+      // Handle any unexpected errors
+      console.warn('useClipboard error:', error);
+      setCopied(false);
+      return false;
     }
-    return success;
   };
 
-  // Cleanup timeout on unmount
+  // Register global reset callback and cleanup timeout on unmount
   useEffect(() => {
-    return clear;
+    // Register callback to reset this component's state when any copy starts
+    cleanupRef.current = clipboardManager.onNewOperation(() => {
+      clear();
+      setCopied(false);
+    });
+    
+    return () => {
+      clear();
+      if (cleanupRef.current) {
+        cleanupRef.current();
+      }
+    };
   }, []);
 
   return { copied, copy, reset };
