@@ -3,7 +3,6 @@ import { PromptCardProps } from "@/types";
 import { PromptCardGrid } from "./components/PromptCardGrid";
 import { PromptCardList } from "./components/PromptCardList";
 
-// Add key to prevent component state collision
 const PromptCardGridWithKey = React.forwardRef<HTMLDivElement, PromptCardProps>((props, ref) => {
   return <PromptCardGrid key={`grid-${props.prompt.id}`} {...props} />;
 });
