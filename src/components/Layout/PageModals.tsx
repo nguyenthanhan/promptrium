@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useState } from "react";
 import PromptForm, { PromptFormRef } from "@/components/Prompt/PromptForm";
 import { Button } from "@/components/ui/button";
@@ -77,11 +79,13 @@ export const PageModals: React.FC<PageModalsProps> = ({
                     <div className="flex items-center">
                       <Loading size="sm" variant="spinner" />
                       <span className="ml-1">
-                        {selectedPrompt ? "Updating..." : "Creating..."}
+                        {modalType === "edit" ? "Updating..." : "Creating..."}
                       </span>
                     </div>
+                  ) : modalType === "edit" ? (
+                    "Update"
                   ) : (
-                    selectedPrompt ? "Update" : "Create"
+                    "Create"
                   )}
                 </Button>
               </div>

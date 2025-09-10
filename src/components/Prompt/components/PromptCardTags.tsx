@@ -1,5 +1,6 @@
 import React from "react";
 import { Tag } from "lucide-react";
+import { cn } from "@/utils/helpers";
 
 interface PromptCardTagsProps {
   tags: string[];
@@ -17,7 +18,7 @@ export const PromptCardTags: React.FC<PromptCardTagsProps> = ({
   }
 
   return (
-    <div className={`flex flex-wrap gap-2 ${className}`}>
+    <div className={cn("flex flex-wrap gap-2", className)}>
       {tags.slice(0, maxTags).map((tag, i) => (
         <span
           key={`${tag}-${i}`}

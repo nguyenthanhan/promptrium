@@ -26,6 +26,7 @@ export type ModalType =
   | null;
 export type ViewMode = "grid" | "list";
 export type LayoutDensity = "compact" | "comfortable" | "expanded";
+export type SortKey = "updated" | "created" | "name" | "usage";
 
 export interface PromptFormData {
   title: string;
@@ -41,6 +42,13 @@ export interface PromptContextType {
   selectedPrompt: Prompt | null;
   isLoading: boolean;
 
+  // Filter state
+  searchQuery: string;
+  selectedTags: string[];
+  showFavorites: boolean;
+  sortBy: SortKey;
+  sortOrder: "asc" | "desc";
+
   addPrompt: (prompt: PromptFormData) => void;
   updatePrompt: (id: string, prompt: PromptFormData) => void;
   deletePrompt: (id: string) => void;
@@ -53,7 +61,7 @@ export interface PromptContextType {
   setSearchQuery: (query: string) => void;
   setSelectedTags: (tags: string[]) => void;
   setShowFavorites: (show: boolean) => void;
-  setSortOptions: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  setSortOptions: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
 
   exportData: () => void;
   importData: (file: File) => Promise<void>;
@@ -90,9 +98,9 @@ export interface FilterPanelProps {
   onTagsChange: (tags: string[]) => void;
   showFavorites: boolean;
   onFavoritesChange: (show: boolean) => void;
-  sortBy: string;
+  sortBy: SortKey;
   sortOrder: "asc" | "desc";
-  onSortChange: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  onSortChange: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
 }
 
 export interface ModalProps {

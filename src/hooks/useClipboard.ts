@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 import { clipboardManager } from "@/utils/clipboardManager";
 
@@ -11,6 +13,7 @@ export function useClipboard(resetDelay: number = 2000): UseClipboardReturn {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cleanupRef = useRef<(() => void) | null>(null);
+  const mountedRef = useRef<boolean>(false);
 
   const clear = () => {
     if (timeoutRef.current) {
@@ -19,50 +22,61 @@ export function useClipboard(resetDelay: number = 2000): UseClipboardReturn {
     }
   };
 
+  const safeSetCopied = (value: boolean) => {
+    if (mountedRef.current) {
+      setCopied(value);
+    }
+  };
+
   const reset = () => {
     clear();
-    setCopied(false);
+    safeSetCopied(false);
   };
 
   const copy = async (text: string): Promise<boolean> => {
     try {
       // Clear any existing timeout first
       clear();
-      
+
       // Immediately set to false to ensure clean state
-      setCopied(false);
-      
+      safeSetCopied(false);
+
       // Use global clipboard manager to handle conflicts
       const success = await clipboardManager.copy(text);
-      
+
       if (success) {
-        setCopied(true);
+        safeSetCopied(true);
         timeoutRef.current = setTimeout(() => {
-          setCopied(false);
+          safeSetCopied(false);
         }, resetDelay);
       } else {
         // Ensure we're not stuck in copied state on failure
-        setCopied(false);
+        safeSetCopied(false);
       }
-      
+
       return success;
     } catch (error) {
       // Handle any unexpected errors
-      console.warn('useClipboard error:', error);
-      setCopied(false);
+      console.warn("useClipboard error:", error);
+      safeSetCopied(false);
       return false;
     }
   };
 
   // Register global reset callback and cleanup timeout on unmount
   useEffect(() => {
+    // Set mounted flag to true
+    mountedRef.current = true;
+
     // Register callback to reset this component's state when any copy starts
     cleanupRef.current = clipboardManager.onNewOperation(() => {
       clear();
-      setCopied(false);
+      safeSetCopied(false);
     });
-    
+
     return () => {
+      // Set mounted flag to false to prevent state updates
+      mountedRef.current = false;
       clear();
       if (cleanupRef.current) {
         cleanupRef.current();

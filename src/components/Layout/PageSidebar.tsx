@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import SearchBar from "@/components/Search/SearchBar";
 import TagsPanel from "@/components/Search/TagsPanel";
@@ -34,20 +36,18 @@ export const PageSidebar: React.FC<PageSidebarProps> = ({
 
         {/* Stats */}
         <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Statistics
-          </h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Statistics</h3>
           <div className="space-y-2 text-sm text-gray-600">
             <div className="flex justify-between">
               <span>Total Prompts:</span>
               <span className="font-medium">
-                {mounted ? prompts.length : 0}
+                {mounted && Array.isArray(prompts) ? prompts.length : 0}
               </span>
             </div>
             <div className="flex justify-between">
               <span>Favorites:</span>
               <span className="font-medium">
-                {mounted
+                {mounted && Array.isArray(prompts)
                   ? prompts.filter((p) => p.is_favorite).length
                   : 0}
               </span>

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { PromptCardProps } from "@/types";
 import { truncateText } from "@/utils/helpers";
@@ -13,13 +15,13 @@ import { PromptCardFavorite } from "./PromptCardFavorite";
 import { PromptCardTags } from "./PromptCardTags";
 import { PromptCardMetadata } from "./PromptCardMetadata";
 
-export const PromptCardGrid: React.FC<PromptCardProps> = ({ 
-  prompt, 
-  layoutDensity, 
-  onEdit, 
-  onDelete, 
-  onCopy, 
-  onToggleFavorite 
+export const PromptCardGrid: React.FC<PromptCardProps> = ({
+  prompt,
+  layoutDensity,
+  onEdit,
+  onDelete,
+  onCopy,
+  onToggleFavorite,
 }) => {
   const { copied, handleCopy, getPadding, getSpacing } = usePromptCard({
     prompt,
@@ -28,8 +30,12 @@ export const PromptCardGrid: React.FC<PromptCardProps> = ({
 
   return (
     <TooltipProvider>
-      <div className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 h-full flex flex-col ${getPadding(layoutDensity)}`}>
-        <div className={`flex items-center justify-between ${getSpacing(layoutDensity)}`}>
+      <div
+        className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 h-full flex flex-col ${getPadding(layoutDensity)}`}
+      >
+        <div
+          className={`flex items-center justify-between ${getSpacing(layoutDensity)}`}
+        >
           <Tooltip>
             <TooltipTrigger asChild>
               <h3 className="text-lg font-semibold text-gray-900 truncate flex-1 mr-3">
@@ -71,9 +77,9 @@ export const PromptCardGrid: React.FC<PromptCardProps> = ({
           )}
         </div>
 
-        <PromptCardTags 
-          tags={prompt.tags} 
-          maxTags={3} 
+        <PromptCardTags
+          tags={prompt.tags}
+          maxTags={3}
           className={getSpacing(layoutDensity)}
         />
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type SetValue<T> = (value: T | ((prevValue: T) => T)) => void;
 
@@ -8,6 +8,7 @@ export function useLocalStorage<T>(
 ): [T, SetValue<T>] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [mounted, setMounted] = useState(false);
+  const initialValueRef = useRef(initialValue);
 
   // Initialize from localStorage after component mounts
   useEffect(() => {
@@ -15,12 +16,14 @@ export function useLocalStorage<T>(
     try {
       const item = window.localStorage.getItem(key);
       if (item) {
-        setStoredValue(JSON.parse(item));
+        const parsed = JSON.parse(item);
+        // Merge with initialValue to ensure missing keys get defaults
+        setStoredValue({ ...initialValueRef.current, ...parsed });
       }
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
     }
-  }, [key]);
+  }, [key]); // Remove initialValue from dependencies
 
   const setValue: SetValue<T> = (value) => {
     try {

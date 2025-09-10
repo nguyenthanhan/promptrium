@@ -14,7 +14,7 @@ export const usePromptCard = ({ prompt, onCopy }: UsePromptCardProps) => {
     if (copied) {
       return;
     }
-    
+
     const success = await copy(prompt.content);
     if (success) {
       onCopy(prompt);

@@ -49,6 +49,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           error ? "border-red-300 focus:ring-red-500" : "border-gray-300"
         }`}
         disabled={disabled}
+        required={required}
         aria-describedby={error ? `${id}-error` : undefined}
         aria-invalid={!!error}
         maxLength={maxLength}

@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { Prompt, Settings } from "@/types";
 import { downloadFile } from "@/utils/helpers";
 import { useToast } from "@/components/ui/use-toast";
@@ -12,8 +13,8 @@ import {
 interface UsePromptDataOperationsProps {
   prompts: Prompt[];
   settings: Settings;
-  setPrompts: React.Dispatch<React.SetStateAction<Prompt[]>>;
-  setSettings: React.Dispatch<React.SetStateAction<Settings>>;
+  setPrompts: Dispatch<SetStateAction<Prompt[]>>;
+  setSettings: Dispatch<SetStateAction<Settings>>;
 }
 
 export const usePromptDataOperations = ({
@@ -25,11 +26,50 @@ export const usePromptDataOperations = ({
   const { success, error } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const defaultSettings: Settings = {
+  const getDefaultSettings = (): Settings => ({
     theme: DEFAULT_SETTINGS.THEME,
     view_mode: DEFAULT_SETTINGS.VIEW_MODE,
     layout_density: DEFAULT_SETTINGS.LAYOUT_DENSITY,
-    last_backup: Date.now(),
+    last_backup: 0, // Will be updated when actually needed
+  });
+
+  const validateSettings = (importedSettings: any): Partial<Settings> => {
+    const validSettings: Partial<Settings> = {};
+
+    // Validate theme
+    if (
+      importedSettings.theme === "light" ||
+      importedSettings.theme === "dark"
+    ) {
+      validSettings.theme = importedSettings.theme;
+    }
+
+    // Validate view_mode
+    if (
+      importedSettings.view_mode === "grid" ||
+      importedSettings.view_mode === "list"
+    ) {
+      validSettings.view_mode = importedSettings.view_mode;
+    }
+
+    // Validate layout_density
+    if (
+      importedSettings.layout_density === "compact" ||
+      importedSettings.layout_density === "comfortable" ||
+      importedSettings.layout_density === "expanded"
+    ) {
+      validSettings.layout_density = importedSettings.layout_density;
+    }
+
+    // Validate last_backup (must be a number)
+    if (
+      typeof importedSettings.last_backup === "number" &&
+      importedSettings.last_backup > 0
+    ) {
+      validSettings.last_backup = importedSettings.last_backup;
+    }
+
+    return validSettings;
   };
 
   const handleExportData = useCallback(() => {
@@ -66,7 +106,8 @@ export const usePromptDataOperations = ({
 
         setPrompts(data.prompts);
         if (data.settings) {
-          setSettings((prev) => ({ ...prev, ...data.settings }));
+          const validatedSettings = validateSettings(data.settings);
+          setSettings((prev) => ({ ...prev, ...validatedSettings }));
         }
 
         success(SUCCESS_MESSAGES.DATA_IMPORTED);
@@ -84,9 +125,9 @@ export const usePromptDataOperations = ({
 
   const clearAllData = useCallback(() => {
     setPrompts([]);
-    setSettings(defaultSettings);
+    setSettings(getDefaultSettings());
     success(SUCCESS_MESSAGES.ALL_DATA_CLEARED);
-  }, [setPrompts, setSettings, success, defaultSettings]);
+  }, [setPrompts, setSettings, success]);
 
   return {
     isLoading,

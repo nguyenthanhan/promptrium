@@ -34,6 +34,11 @@ export const truncateText = (text: string, maxLength: number): string => {
 };
 
 export const searchPrompts = (prompts: Prompt[], query: string): Prompt[] => {
+  // Ensure prompts is an array before filtering
+  if (!Array.isArray(prompts)) {
+    return [];
+  }
+
   if (!query.trim()) return prompts;
   const searchTerm = query.toLowerCase();
   return prompts.filter(
@@ -41,14 +46,24 @@ export const searchPrompts = (prompts: Prompt[], query: string): Prompt[] => {
       prompt.title.toLowerCase().includes(searchTerm) ||
       prompt.content.toLowerCase().includes(searchTerm) ||
       prompt.description.toLowerCase().includes(searchTerm) ||
-      prompt.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      (Array.isArray(prompt.tags) &&
+        prompt.tags.some((tag) => tag.toLowerCase().includes(searchTerm)))
   );
 };
 
 export const getAllTags = (prompts: Prompt[]): string[] => {
   const tagSet = new Set<string>();
+
+  // Ensure prompts is an array before iterating
+  if (!Array.isArray(prompts)) {
+    return [];
+  }
+
   prompts.forEach((prompt) => {
-    prompt.tags.forEach((tag) => tagSet.add(tag));
+    // Ensure prompt.tags is an array before iterating
+    if (Array.isArray(prompt.tags)) {
+      prompt.tags.forEach((tag) => tagSet.add(tag));
+    }
   });
   return Array.from(tagSet).sort();
 };
@@ -124,37 +139,38 @@ export const copyToClipboard = async (text: string): Promise<boolean> => {
     if (navigator.clipboard && window.isSecureContext) {
       // Add timeout to prevent hanging on slow clipboard operations
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Clipboard timeout')), 1000);
+        setTimeout(() => reject(new Error("Clipboard timeout")), 1000);
       });
-      
-      await Promise.race([
-        navigator.clipboard.writeText(text),
-        timeoutPromise
-      ]);
-      
+
+      await Promise.race([navigator.clipboard.writeText(text), timeoutPromise]);
+
       return true;
     } else {
       // Fallback method for non-secure contexts
-      const textArea = document.createElement('textarea');
+      const textArea = document.createElement("textarea");
       textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
       document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      
+
       try {
-        const success = document.execCommand('copy');
-        document.body.removeChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        const success = document.execCommand("copy");
         return success;
       } catch {
-        document.body.removeChild(textArea);
         return false;
+      } finally {
+        // Always remove the textarea, regardless of success or failure
+        if (document.body.contains(textArea)) {
+          document.body.removeChild(textArea);
+        }
       }
     }
   } catch (error) {
-    console.warn('Copy to clipboard failed:', error);
+    console.warn("Copy to clipboard failed:", error);
     return false;
   }
 };

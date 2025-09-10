@@ -24,18 +24,17 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
     return (
       <div className="flex items-center space-x-3 ml-6">
         <Button
+          type="button"
           variant="ghost"
           size="default"
           onClick={onCopy}
           disabled={copied}
           className={`p-2 shadow-sm transition-all duration-200 ${
-            copied 
-              ? "text-blue-500 cursor-not-allowed opacity-75" 
+            copied
+              ? "text-blue-500 cursor-not-allowed opacity-75"
               : "hover:shadow-md"
           }`}
-          aria-label={
-            copied ? "Copied to clipboard" : "Copy prompt content"
-          }
+          aria-label={copied ? "Copied to clipboard" : "Copy prompt content"}
         >
           {copied ? (
             <>
@@ -50,6 +49,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
           )}
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="default"
           onClick={() => onEdit(prompt)}
@@ -59,6 +59,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
           <Edit3 className="w-5 h-5" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="default"
           onClick={() => onDelete(prompt)}
@@ -74,13 +75,14 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
   return (
     <div className="flex items-center space-x-3">
       <Button
+        type="button"
         variant="default"
         size="default"
         onClick={onCopy}
         disabled={copied}
         className={`flex-1 shadow-sm transition-all duration-200 ${
-          copied 
-            ? "bg-blue-500 text-white cursor-not-allowed" 
+          copied
+            ? "bg-blue-500 text-white cursor-not-allowed"
             : "hover:shadow-md"
         }`}
         aria-label={copied ? "Copied to clipboard" : "Copy prompt content"}
@@ -98,6 +100,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
         )}
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="default"
         onClick={() => onEdit(prompt)}
@@ -107,6 +110,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
         <Edit3 className="w-5 h-5" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="default"
         onClick={() => onDelete(prompt)}

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import PromptCard from "@/components/Prompt/PromptCard";
@@ -47,7 +49,7 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
     return (
       <main className="flex-1 pr-4">
         <div className="text-center py-12">
-          {prompts.length === 0 ? (
+          {!Array.isArray(prompts) || prompts.length === 0 ? (
             // Empty state - no prompts
             <div className="space-y-4">
               <Image
@@ -110,14 +112,14 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
                 settings.layout_density === "compact"
                   ? "lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
                   : settings.layout_density === "comfortable"
-                  ? "lg:grid-cols-2 xl:grid-cols-3 gap-6"
-                  : "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8"
+                    ? "lg:grid-cols-2 xl:grid-cols-3 gap-6"
+                    : "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8"
               }`
             : settings.layout_density === "compact"
-            ? "space-y-3"
-            : settings.layout_density === "comfortable"
-            ? "space-y-4"
-            : "space-y-6"
+              ? "space-y-3"
+              : settings.layout_density === "comfortable"
+                ? "space-y-4"
+                : "space-y-6"
         }
       >
         {filteredPrompts.map((prompt) => (

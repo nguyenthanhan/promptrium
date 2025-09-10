@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { PromptCardProps } from "@/types";
 import { truncateText } from "@/utils/helpers";
@@ -13,13 +15,13 @@ import { PromptCardFavorite } from "./PromptCardFavorite";
 import { PromptCardTags } from "./PromptCardTags";
 import { PromptCardMetadata } from "./PromptCardMetadata";
 
-export const PromptCardList: React.FC<PromptCardProps> = ({ 
-  prompt, 
-  layoutDensity, 
-  onEdit, 
-  onDelete, 
-  onCopy, 
-  onToggleFavorite 
+export const PromptCardList: React.FC<PromptCardProps> = ({
+  prompt,
+  layoutDensity,
+  onEdit,
+  onDelete,
+  onCopy,
+  onToggleFavorite,
 }) => {
   const { copied, handleCopy, getPadding } = usePromptCard({
     prompt,
@@ -28,7 +30,9 @@ export const PromptCardList: React.FC<PromptCardProps> = ({
 
   return (
     <TooltipProvider>
-      <div className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 ${getPadding(layoutDensity)}`}>
+      <div
+        className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 ${getPadding(layoutDensity)}`}
+      >
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-2">
@@ -78,11 +82,7 @@ export const PromptCardList: React.FC<PromptCardProps> = ({
               variant="list"
             />
 
-            <PromptCardTags 
-              tags={prompt.tags} 
-              maxTags={4} 
-              className="mt-3"
-            />
+            <PromptCardTags tags={prompt.tags} maxTags={4} className="mt-3" />
           </div>
 
           <PromptCardActions

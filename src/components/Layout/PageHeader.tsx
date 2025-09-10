@@ -1,6 +1,8 @@
-import React from "react";
+"use client";
+
+import React, { useRef } from "react";
 import Image from "next/image";
-import { Settings } from "@/types";
+import { Settings, SortKey } from "@/types";
 import HeaderFilters from "@/components/Search/HeaderFilters";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,13 +30,13 @@ import {
 interface PageHeaderProps {
   settings: Settings;
   showFavorites: boolean;
-  sortBy: string;
+  sortBy: SortKey;
   sortOrder: "asc" | "desc";
   onCreateClick: () => void;
   onViewModeChange: (viewMode: string) => void;
   onLayoutDensityChange: (density: string) => void;
   onFavoritesChange: (show: boolean) => void;
-  onSortChange: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  onSortChange: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
   onExport: () => void;
   onImport: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -52,6 +54,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   onExport,
   onImport,
 }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const getViewModeIcon = () => {
     switch (settings.view_mode) {
       case "grid":
@@ -96,14 +99,24 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <div className="flex items-center space-x-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="default" className="shadow-sm hover:shadow-md transition-all duration-200">
+                <Button
+                  variant="ghost"
+                  size="default"
+                  className="shadow-sm hover:shadow-md transition-all duration-200"
+                >
                   {getViewModeIcon()}
                   <ChevronDown className="w-4 h-4 ml-2" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-32 w-auto max-w-48 sm:max-w-56 bg-white shadow-lg border border-gray-200">
+              <DropdownMenuContent
+                align="end"
+                className="min-w-32 w-auto max-w-48 sm:max-w-56 bg-white shadow-lg border border-gray-200"
+              >
                 <DropdownMenuLabel>Layout View</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={settings.view_mode} onValueChange={onViewModeChange}>
+                <DropdownMenuRadioGroup
+                  value={settings.view_mode}
+                  onValueChange={onViewModeChange}
+                >
                   <DropdownMenuRadioItem value="grid">
                     <LayoutGrid className="w-4 h-4 mr-2" />
                     Grid View
@@ -113,11 +126,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
                     List View
                   </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
-                {settings.view_mode === 'grid' && (
+                {settings.view_mode === "grid" && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuLabel>Layout Density</DropdownMenuLabel>
-                    <DropdownMenuRadioGroup value={settings.layout_density} onValueChange={onLayoutDensityChange}>
+                    <DropdownMenuRadioGroup
+                      value={settings.layout_density}
+                      onValueChange={onLayoutDensityChange}
+                    >
                       <DropdownMenuRadioItem value="compact">
                         {getDensityIcon("compact")}
                         Compact
@@ -144,7 +160,12 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               onSortChange={onSortChange}
             />
 
-            <Button variant="ghost" size="default" onClick={onExport} className="shadow-sm hover:shadow-md transition-all duration-200">
+            <Button
+              variant="ghost"
+              size="default"
+              onClick={onExport}
+              className="shadow-sm hover:shadow-md transition-all duration-200"
+            >
               <Download className="w-5 h-5 mr-2" />
               Export
             </Button>
@@ -152,20 +173,16 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
             <div className="relative">
               <input
                 type="file"
-                accept=".json"
+                accept=".json,application/json"
                 onChange={onImport}
                 className="sr-only"
-                id="import-file"
+                ref={fileInputRef}
               />
               <Button
                 variant="ghost"
                 size="default"
-                onClick={() => {
-                  const input = document.getElementById("import-file") as HTMLInputElement;
-                  if (input) {
-                    input.click();
-                  }
-                }}
+                aria-label="Import from JSON"
+                onClick={() => fileInputRef.current?.click()}
                 className="shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Upload className="w-5 h-5 mr-2" />

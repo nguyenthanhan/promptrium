@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useCallback } from "react";
+import React, { createContext, useContext, useCallback, useMemo } from "react";
 import { Prompt, PromptFormData } from "@/types";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { validatePrompt, deduplicateTags } from "@/utils/helpers";
@@ -140,15 +140,26 @@ export const PromptDataProvider: React.FC<{ children: React.ReactNode }> = ({
     [setPrompts]
   );
 
-  const contextValue: PromptDataContextType = {
-    prompts,
-    addPrompt,
-    updatePrompt,
-    deletePrompt,
-    toggleFavorite,
-    incrementUsage,
-    setPrompts,
-  };
+  const contextValue: PromptDataContextType = useMemo(
+    () => ({
+      prompts,
+      addPrompt,
+      updatePrompt,
+      deletePrompt,
+      toggleFavorite,
+      incrementUsage,
+      setPrompts,
+    }),
+    [
+      prompts,
+      addPrompt,
+      updatePrompt,
+      deletePrompt,
+      toggleFavorite,
+      incrementUsage,
+      setPrompts,
+    ]
+  );
 
   return (
     <PromptDataContext.Provider value={contextValue}>

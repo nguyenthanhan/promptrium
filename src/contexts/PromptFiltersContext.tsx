@@ -1,7 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react";
-import { Prompt } from "@/types";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
+import { Prompt, SortKey } from "@/types";
 import { searchPrompts } from "@/utils/helpers";
 import { SORT_KEYS, SORT_ORDER } from "@/constants";
 
@@ -9,21 +16,25 @@ interface PromptFiltersContextType {
   searchQuery: string;
   selectedTags: string[];
   showFavorites: boolean;
-  sortBy: string;
+  sortBy: SortKey;
   sortOrder: "asc" | "desc";
   filteredPrompts: Prompt[];
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   setShowFavorites: React.Dispatch<React.SetStateAction<boolean>>;
-  setSortOptions: (newSortBy: string, newSortOrder: "asc" | "desc") => void;
+  setSortOptions: (newSortBy: SortKey, newSortOrder: "asc" | "desc") => void;
 }
 
-const PromptFiltersContext = createContext<PromptFiltersContextType | undefined>(undefined);
+const PromptFiltersContext = createContext<
+  PromptFiltersContextType | undefined
+>(undefined);
 
 export const usePromptFilters = () => {
   const context = useContext(PromptFiltersContext);
   if (!context) {
-    throw new Error("usePromptFilters must be used within a PromptFiltersProvider");
+    throw new Error(
+      "usePromptFilters must be used within a PromptFiltersProvider"
+    );
   }
   return context;
 };
@@ -41,7 +52,7 @@ export const PromptFiltersProvider: React.FC<PromptFiltersProviderProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showFavorites, setShowFavorites] = useState(false);
-  const [sortBy, setSortBy] = useState<string>(SORT_KEYS.UPDATED);
+  const [sortBy, setSortBy] = useState<SortKey>(SORT_KEYS.UPDATED);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">(SORT_ORDER.DESC);
 
   // Set mounted state after component mounts to prevent hydration issues
@@ -52,6 +63,9 @@ export const PromptFiltersProvider: React.FC<PromptFiltersProviderProps> = ({
   const filteredPrompts = useMemo(() => {
     // Return empty array until mounted to prevent hydration mismatch
     if (!mounted) return [];
+
+    // Ensure prompts is an array before spreading
+    if (!Array.isArray(prompts)) return [];
 
     let filtered = [...prompts];
 
@@ -102,25 +116,39 @@ export const PromptFiltersProvider: React.FC<PromptFiltersProviderProps> = ({
   ]);
 
   const setSortOptions = useCallback(
-    (newSortBy: string, newSortOrder: "asc" | "desc") => {
+    (newSortBy: SortKey, newSortOrder: "asc" | "desc") => {
       setSortBy(newSortBy);
       setSortOrder(newSortOrder);
     },
     []
   );
 
-  const contextValue: PromptFiltersContextType = {
-    searchQuery,
-    selectedTags,
-    showFavorites,
-    sortBy,
-    sortOrder,
-    filteredPrompts,
-    setSearchQuery,
-    setSelectedTags,
-    setShowFavorites,
-    setSortOptions,
-  };
+  const contextValue: PromptFiltersContextType = useMemo(
+    () => ({
+      searchQuery,
+      selectedTags,
+      showFavorites,
+      sortBy,
+      sortOrder,
+      filteredPrompts,
+      setSearchQuery,
+      setSelectedTags,
+      setShowFavorites,
+      setSortOptions,
+    }),
+    [
+      searchQuery,
+      selectedTags,
+      showFavorites,
+      sortBy,
+      sortOrder,
+      filteredPrompts,
+      setSearchQuery,
+      setSelectedTags,
+      setShowFavorites,
+      setSortOptions,
+    ]
+  );
 
   return (
     <PromptFiltersContext.Provider value={contextValue}>

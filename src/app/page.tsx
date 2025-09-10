@@ -15,7 +15,7 @@ export default function Home() {
     filteredPrompts,
     availableTags,
     mounted,
-    
+
     // State
     selectedPrompt,
     modalType,
@@ -24,7 +24,7 @@ export default function Home() {
     showFavorites,
     sortBy,
     sortOrder,
-    
+
     // Handlers
     handleSearchChange,
     handleTagsChange,

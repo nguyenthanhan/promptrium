@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useId } from "react";
 import { Button } from "@/components/ui/button";
 import { X, Plus, AlertCircle } from "lucide-react";
 import { VALIDATION, ERROR_MESSAGES } from "@/constants";
@@ -21,6 +21,12 @@ export const TagsInput: React.FC<TagsInputProps> = ({
   const [newTag, setNewTag] = useState("");
   const [tagError, setTagError] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Generate unique IDs to prevent conflicts when multiple instances exist
+  const baseId = useId();
+  const inputId = `tags-${baseId}`;
+  const errorId = `tags-error-${baseId}`;
+  const helpId = `tags-help-${baseId}`;
 
   const handleAddTag = useCallback(() => {
     const tag = newTag.trim();
@@ -69,17 +75,17 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       if (e.key === "Enter" || e.key === ",") {
         e.preventDefault();
         // Calculate suggestions on the fly for exact match check
-        const currentSuggestions = availableTags
-          .filter((tag) => 
-            !tags.includes(tag) && 
-            tag.toLowerCase().includes(newTag.toLowerCase()) && 
+        const currentSuggestions = availableTags.filter(
+          (tag) =>
+            !tags.includes(tag) &&
+            tag.toLowerCase().includes(newTag.toLowerCase()) &&
             newTag.trim().length > 0
-          );
-        
+        );
+
         // If there's a matching suggestion, use the exact match
         if (currentSuggestions.length > 0 && newTag.trim().length > 0) {
-          const exactMatch = currentSuggestions.find(tag => 
-            tag.toLowerCase() === newTag.toLowerCase()
+          const exactMatch = currentSuggestions.find(
+            (tag) => tag.toLowerCase() === newTag.toLowerCase()
           );
           if (exactMatch) {
             handleSelectAvailableTag(exactMatch);
@@ -108,12 +114,30 @@ export const TagsInput: React.FC<TagsInputProps> = ({
     setTimeout(() => setShowSuggestions(false), 200);
   }, []);
 
+  // Helper function to highlight matched text accurately
+  const highlightMatch = (text: string, query: string) => {
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const matchIndex = lowerText.indexOf(lowerQuery);
+
+    if (matchIndex === -1) {
+      return { before: text, match: "", after: "" };
+    }
+
+    return {
+      before: text.substring(0, matchIndex),
+      match: text.substring(matchIndex, matchIndex + query.length),
+      after: text.substring(matchIndex + query.length),
+    };
+  };
+
   // Filter available tags based on input for display
   const suggestedTags = availableTags
-    .filter((tag) => 
-      !tags.includes(tag) && // Not already selected
-      tag.toLowerCase().includes(newTag.toLowerCase()) && // Matches input
-      newTag.trim().length > 0 // Only show when user is typing
+    .filter(
+      (tag) =>
+        !tags.includes(tag) && // Not already selected
+        tag.toLowerCase().includes(newTag.toLowerCase()) && // Matches input
+        newTag.trim().length > 0 // Only show when user is typing
     )
     .slice(0, 5); // Limit to 5 suggestions
 
@@ -121,7 +145,10 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 
   return (
     <div className="space-y-2">
-      <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
+      <label
+        htmlFor={inputId}
+        className="block text-sm font-medium text-gray-700"
+      >
         Tags
       </label>
 
@@ -149,7 +176,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 
       <div className="flex space-x-2">
         <input
-          id="tags"
+          id={inputId}
           type="text"
           value={newTag}
           onChange={(e) => {
@@ -167,7 +194,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
               : "border-gray-300"
           }`}
           disabled={disabled}
-          aria-describedby={displayError ? "tags-error" : "tags-help"}
+          aria-describedby={displayError ? errorId : helpId}
           maxLength={VALIDATION.TAGS.MAX_LENGTH}
         />
         <Button
@@ -186,26 +213,28 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       {showSuggestions && suggestedTags.length > 0 && (
         <div className="relative z-10">
           <div className="absolute top-0 left-0 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-40 overflow-y-auto">
-            {suggestedTags.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => {
-                  handleSelectAvailableTag(tag);
-                  setNewTag("");
-                  setShowSuggestions(false);
-                }}
-                className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 focus:bg-blue-50 focus:outline-none border-b border-gray-100 last:border-b-0"
-                disabled={disabled}
-              >
-                <span className="text-blue-600 font-medium">
-                  {tag.substring(0, newTag.length)}
-                </span>
-                <span className="text-gray-700">
-                  {tag.substring(newTag.length)}
-                </span>
-              </button>
-            ))}
+            {suggestedTags.map((tag) => {
+              const highlight = highlightMatch(tag, newTag);
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => {
+                    handleSelectAvailableTag(tag);
+                    setNewTag("");
+                    setShowSuggestions(false);
+                  }}
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 focus:bg-blue-50 focus:outline-none border-b border-gray-100 last:border-b-0"
+                  disabled={disabled}
+                >
+                  <span className="text-gray-700">{highlight.before}</span>
+                  <span className="text-blue-600 font-medium">
+                    {highlight.match}
+                  </span>
+                  <span className="text-gray-700">{highlight.after}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
@@ -213,7 +242,9 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       {/* Available Tags */}
       {availableTags.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-gray-600">Available tags (click to add):</p>
+          <p className="text-xs font-medium text-gray-600">
+            Available tags (click to add):
+          </p>
           <div className="flex flex-wrap gap-2">
             {availableTags
               .filter((tag) => !tags.includes(tag)) // Only show tags not already selected
@@ -222,29 +253,30 @@ export const TagsInput: React.FC<TagsInputProps> = ({
                   key={tag}
                   type="button"
                   onClick={() => handleSelectAvailableTag(tag)}
-                  disabled={disabled || tags.length >= VALIDATION.TAGS.MAX_COUNT}
+                  disabled={
+                    disabled || tags.length >= VALIDATION.TAGS.MAX_COUNT
+                  }
                   className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-blue-50 focus:text-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label={`Add tag: ${tag}`}
                 >
                   <Plus className="w-3 h-3 mr-1" />
                   {tag}
                 </button>
-              ))
-            }
+              ))}
           </div>
         </div>
       )}
 
       {displayError && (
-        <p id="tags-error" className="text-sm text-red-600 flex items-center">
+        <p id={errorId} className="text-sm text-red-600 flex items-center">
           <AlertCircle className="w-4 h-4 mr-1" />
           {displayError}
         </p>
       )}
 
-      <p id="tags-help" className="text-xs text-gray-500">
-        Press Enter or comma to add a tag. Click existing tags below or the X to remove.
-        Maximum {VALIDATION.TAGS.MAX_COUNT} tags.
+      <p id={helpId} className="text-xs text-gray-500">
+        Press Enter or comma to add a tag. Click existing tags below or the X to
+        remove. Maximum {VALIDATION.TAGS.MAX_COUNT} tags.
       </p>
     </div>
   );
