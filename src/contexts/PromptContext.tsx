@@ -6,26 +6,18 @@ import React, {
   useState,
   useCallback,
   useMemo,
-  useEffect,
 } from "react";
-import { Prompt, Settings, PromptContextType, PromptFormData } from "@/types";
+import { Prompt, Settings, PromptContextType, SortKey } from "@/types";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import {
-  searchPrompts,
-  downloadFile,
-  validatePrompt,
-  deduplicateTags,
-} from "@/utils/helpers";
-import { useToast } from "@/components/ui/use-toast";
-import { v4 as uuidv4 } from "uuid";
+import { usePromptDataOperations } from "@/hooks/usePromptDataOperations";
+import { PromptDataProvider, usePromptData } from "./PromptDataContext";
+// Removed PromptFiltersProvider - filter logic is now integrated into PromptContext
+
 import {
   STORAGE_KEYS,
-  SUCCESS_MESSAGES,
-  ERROR_MESSAGES,
-  EXPORT,
+  DEFAULT_SETTINGS,
   SORT_KEYS,
   SORT_ORDER,
-  DEFAULT_SETTINGS,
 } from "@/constants";
 
 const PromptContext = createContext<PromptContextType | undefined>(undefined);
@@ -41,46 +33,69 @@ export const usePrompts = () => {
 const defaultSettings: Settings = {
   theme: DEFAULT_SETTINGS.THEME,
   view_mode: DEFAULT_SETTINGS.VIEW_MODE,
-  last_backup: Date.now(),
+  layout_density: DEFAULT_SETTINGS.LAYOUT_DENSITY,
+  last_backup: 0, // Will be updated when actually needed
 };
 
-export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
+// Internal provider that combines all contexts
+const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { success, error } = useToast();
-  const [mounted, setMounted] = useState(false);
-
-  const [prompts, setPrompts] = useLocalStorage<Prompt[]>(
-    STORAGE_KEYS.PROMPTS,
-    []
-  );
   const [settings, setSettings] = useLocalStorage<Settings>(
     STORAGE_KEYS.SETTINGS,
     defaultSettings
   );
-
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [sortBy, setSortBy] = useState<string>(SORT_KEYS.UPDATED);
+  // Filter state
+  const [searchQuery, setSearchQueryInternal] = useState("");
+  const [selectedTags, setSelectedTagsInternal] = useState<string[]>([]);
+  const [showFavorites, setShowFavoritesInternal] = useState(false);
+  const [sortBy, setSortBy] = useState<SortKey>(SORT_KEYS.UPDATED);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">(SORT_ORDER.DESC);
 
-  // Set mounted state after component mounts to prevent hydration issues
-  useEffect(() => {
-    setMounted(true);
+  // Memoize state setters to prevent infinite re-renders
+  const setSearchQuery = useCallback((query: string) => {
+    setSearchQueryInternal(query);
   }, []);
 
+  const setSelectedTags = useCallback((tags: string[]) => {
+    setSelectedTagsInternal(tags);
+  }, []);
+
+  const setShowFavorites = useCallback((show: boolean) => {
+    setShowFavoritesInternal(show);
+  }, []);
+
+  // Get prompt data operations
+  const {
+    prompts,
+    addPrompt,
+    updatePrompt,
+    deletePrompt,
+    toggleFavorite,
+    incrementUsage,
+    setPrompts,
+  } = usePromptData();
+
+  // Get filtered prompts
   const filteredPrompts = useMemo(() => {
-    // Return empty array until mounted to prevent hydration mismatch
-    if (!mounted) return [];
+    if (!Array.isArray(prompts)) return [];
 
     let filtered = [...prompts];
 
     if (searchQuery.trim()) {
-      filtered = searchPrompts(filtered, searchQuery);
+      filtered = filtered.filter(
+        (prompt) =>
+          prompt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          prompt.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          prompt.description
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          prompt.tags.some((tag) =>
+            tag.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+      );
     }
 
     if (selectedTags.length > 0) {
@@ -115,118 +130,41 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     return filtered;
-  }, [
+  }, [prompts, searchQuery, selectedTags, showFavorites, sortBy, sortOrder]);
+
+  const setSortOptions = useCallback(
+    (newSortBy: SortKey, newSortOrder: "asc" | "desc") => {
+      setSortBy(newSortBy);
+      setSortOrder(newSortOrder);
+    },
+    []
+  );
+
+  // Get data operations (export, import, clear)
+  const {
+    isLoading,
+    exportData,
+    importData,
+    clearAllData: originalClearAllData,
+  } = usePromptDataOperations({
     prompts,
-    searchQuery,
-    selectedTags,
-    showFavorites,
-    sortBy,
-    sortOrder,
-    mounted,
+    settings,
+    setPrompts,
+    setSettings,
+  });
+
+  // Wrapper for clearAllData that also resets selected prompt and filter state
+  const clearAllData = useCallback(() => {
+    originalClearAllData();
+    setSelectedPrompt(null);
+    setSearchQueryInternal("");
+    setSelectedTagsInternal([]);
+    setShowFavoritesInternal(false);
+    setSortOptions(SORT_KEYS.UPDATED, SORT_ORDER.DESC);
+  }, [
+    originalClearAllData,
+    setSortOptions,
   ]);
-
-  const addPrompt = useCallback(
-    (promptData: PromptFormData) => {
-      const validation = validatePrompt(promptData);
-      if (!validation.isValid) {
-        error(
-          ERROR_MESSAGES.OPERATIONS.VALIDATION_FAILED,
-          validation.errors.join(", ")
-        );
-        return;
-      }
-
-      const newPrompt: Prompt = {
-        id: uuidv4(),
-        title: promptData.title.trim(),
-        content: promptData.content.trim(),
-        description: promptData.description.trim(),
-        tags: deduplicateTags(promptData.tags),
-        created_at: Date.now(),
-        updated_at: Date.now(),
-        usage_count: 0,
-        is_favorite: false,
-      };
-
-      setPrompts((prev) => [...prev, newPrompt]);
-      success(SUCCESS_MESSAGES.PROMPT_CREATED);
-    },
-    [setPrompts]
-  );
-
-  const updatePrompt = useCallback(
-    (id: string, promptData: PromptFormData) => {
-      const validation = validatePrompt(promptData);
-      if (!validation.isValid) {
-        error(
-          ERROR_MESSAGES.OPERATIONS.VALIDATION_FAILED,
-          validation.errors.join(", ")
-        );
-        return;
-      }
-
-      setPrompts((prev) =>
-        prev.map((prompt) =>
-          prompt.id === id
-            ? {
-                ...prompt,
-                title: promptData.title.trim(),
-                content: promptData.content.trim(),
-                description: promptData.description.trim(),
-                tags: deduplicateTags(promptData.tags),
-                updated_at: Date.now(),
-              }
-            : prompt
-        )
-      );
-
-      success(SUCCESS_MESSAGES.PROMPT_UPDATED);
-    },
-    [setPrompts]
-  );
-
-  const deletePrompt = useCallback(
-    (id: string) => {
-      setPrompts((prev) => prev.filter((prompt) => prompt.id !== id));
-      if (selectedPrompt?.id === id) setSelectedPrompt(null);
-      success(SUCCESS_MESSAGES.PROMPT_DELETED);
-    },
-    [setPrompts, selectedPrompt]
-  );
-
-  const toggleFavorite = useCallback(
-    (id: string) => {
-      setPrompts((prev) =>
-        prev.map((prompt) =>
-          prompt.id === id
-            ? {
-                ...prompt,
-                is_favorite: !prompt.is_favorite,
-                updated_at: Date.now(),
-              }
-            : prompt
-        )
-      );
-    },
-    [setPrompts]
-  );
-
-  const incrementUsage = useCallback(
-    (id: string) => {
-      setPrompts((prev) =>
-        prev.map((prompt) =>
-          prompt.id === id
-            ? {
-                ...prompt,
-                usage_count: prompt.usage_count + 1,
-                updated_at: Date.now(),
-              }
-            : prompt
-        )
-      );
-    },
-    [setPrompts]
-  );
 
   const selectPrompt = useCallback((prompt: Prompt | null) => {
     setSelectedPrompt(prompt);
@@ -239,99 +177,88 @@ export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
     [setSettings]
   );
 
-  const setSortOptions = useCallback(
-    (newSortBy: string, newSortOrder: "asc" | "desc") => {
-      setSortBy(newSortBy);
-      setSortOrder(newSortOrder);
-    },
-    []
-  );
-
-  const handleExportData = useCallback(() => {
-    const jsonData = JSON.stringify(
-      {
-        prompts,
-        settings,
-        exportDate: new Date().toISOString(),
-        version: EXPORT.VERSION,
-      },
-      null,
-      2
-    );
-
-    const filename = `promptrium-export-${
-      new Date().toISOString().split("T")[0]
-    }.json`;
-    downloadFile(jsonData, filename, EXPORT.MIME_TYPE);
-
-    setSettings((prev) => ({ ...prev, last_backup: Date.now() }));
-    success(SUCCESS_MESSAGES.DATA_EXPORTED);
-  }, [prompts, settings, setSettings]);
-
-  const handleImportData = useCallback(
-    async (file: File) => {
-      try {
-        setIsLoading(true);
-        const text = await file.text();
-        const data = JSON.parse(text);
-
-        if (!data.prompts || !Array.isArray(data.prompts)) {
-          throw new Error(ERROR_MESSAGES.OPERATIONS.INVALID_DATA_FORMAT);
-        }
-
-        setPrompts(data.prompts);
-        if (data.settings) {
-          setSettings((prev) => ({ ...prev, ...data.settings }));
-        }
-
-        success(SUCCESS_MESSAGES.DATA_IMPORTED);
-      } catch {
-        error(
-          ERROR_MESSAGES.OPERATIONS.IMPORT_FAILED,
-          "Please check the file format."
-        );
-      } finally {
-        setIsLoading(false);
+  const handleDeletePrompt = useCallback(
+    (id: string) => {
+      deletePrompt(id);
+      if (selectedPrompt?.id === id) {
+        setSelectedPrompt(null);
       }
     },
-    [setPrompts, setSettings]
+    [deletePrompt, selectedPrompt]
   );
 
-  const clearAllData = useCallback(() => {
-    setPrompts([]);
-    setSettings(defaultSettings);
-    setSelectedPrompt(null);
-    setSearchQuery("");
-    setSelectedTags([]);
-    setShowFavorites(false);
-    success(SUCCESS_MESSAGES.ALL_DATA_CLEARED);
-  }, [setPrompts, setSettings]);
-
-  const contextValue: PromptContextType = {
-    prompts,
-    settings,
-    filteredPrompts,
-    selectedPrompt,
-    isLoading,
-    addPrompt,
-    updatePrompt,
-    deletePrompt,
-    toggleFavorite,
-    incrementUsage,
-    selectPrompt,
-    updateSettings,
-    setSearchQuery,
-    setSelectedTags,
-    setShowFavorites,
-    setSortOptions,
-    exportData: handleExportData,
-    importData: handleImportData,
-    clearAllData,
-  };
+  const contextValue: PromptContextType = useMemo(
+    () => ({
+      prompts,
+      settings,
+      filteredPrompts,
+      selectedPrompt,
+      isLoading,
+      // Filter state
+      searchQuery,
+      selectedTags,
+      showFavorites,
+      sortBy,
+      sortOrder,
+      // Actions
+      addPrompt,
+      updatePrompt,
+      deletePrompt: handleDeletePrompt,
+      toggleFavorite,
+      incrementUsage,
+      selectPrompt,
+      updateSettings,
+      setSearchQuery,
+      setSelectedTags,
+      setShowFavorites,
+      setSortOptions,
+      exportData,
+      importData,
+      clearAllData,
+    }),
+    [
+      prompts,
+      settings,
+      filteredPrompts,
+      selectedPrompt,
+      isLoading,
+      searchQuery,
+      selectedTags,
+      showFavorites,
+      sortBy,
+      sortOrder,
+      // Only include stable callback functions in dependencies
+      addPrompt,
+      updatePrompt,
+      handleDeletePrompt,
+      toggleFavorite,
+      incrementUsage,
+      selectPrompt,
+      updateSettings,
+      setSearchQuery,
+      setSelectedTags,
+      setShowFavorites,
+      setSortOptions,
+      exportData,
+      importData,
+      clearAllData,
+    ]
+  );
 
   return (
     <PromptContext.Provider value={contextValue}>
       {children}
     </PromptContext.Provider>
+  );
+};
+
+// Main provider that wraps everything
+export const PromptProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  return (
+    <PromptDataProvider>
+      <InternalPromptProvider>{children}</InternalPromptProvider>
+    </PromptDataProvider>
   );
 };

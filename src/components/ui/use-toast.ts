@@ -182,17 +182,29 @@ function useToast() {
   }, []);
 
   // Convenience methods for common toast types
-  const success = (title: string, description?: string) =>
-    toast({ title, description, variant: "default" });
+  const success = React.useCallback(
+    (title: string, description?: string) =>
+      toast({ title, description, variant: "default" }),
+    []
+  );
 
-  const error = (title: string, description?: string) =>
-    toast({ title, description, variant: "destructive" });
+  const error = React.useCallback(
+    (title: string, description?: string) =>
+      toast({ title, description, variant: "destructive" }),
+    []
+  );
 
-  const info = (title: string, description?: string) =>
-    toast({ title, description, variant: "default" });
+  const info = React.useCallback(
+    (title: string, description?: string) =>
+      toast({ title, description, variant: "default" }),
+    []
+  );
 
-  const warning = (title: string, description?: string) =>
-    toast({ title, description, variant: "default" });
+  const warning = React.useCallback(
+    (title: string, description?: string) =>
+      toast({ title, description, variant: "default" }),
+    []
+  );
 
   return {
     ...state,

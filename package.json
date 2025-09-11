@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "clean": "rm -rf .next node_modules/.cache",
     "release": "./scripts/release.sh",
     "release:patch": "./scripts/release.sh patch",
@@ -81,6 +83,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "eslint-import-resolver-typescript": "^4.4.4",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

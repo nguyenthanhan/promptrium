@@ -1,5 +1,5 @@
 import React from "react";
-import { FilterPanelProps } from "@/types";
+import { FilterPanelProps, SortKey } from "@/types";
 import {
   Filter,
   Heart,
@@ -28,7 +28,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     }
   };
 
-  const handleSortChange = (newSortBy: string) => {
+  const handleSortChange = (newSortBy: SortKey) => {
     if (sortBy === newSortBy) {
       onSortChange(newSortBy, sortOrder === "asc" ? "desc" : "asc");
     } else {
@@ -36,14 +36,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     }
   };
 
-  const sortOptions = [
+  const isTagSelected = (tag: string) => selectedTags.includes(tag);
+
+  const sortOptions: { key: SortKey; label: string }[] = [
     { key: "updated", label: "Last Updated" },
     { key: "created", label: "Created Date" },
     { key: "name", label: "Name" },
     { key: "usage", label: "Usage Count" },
   ];
 
-  const getSortIcon = (optionKey: string) => {
+  const getSortIcon = (optionKey: SortKey) => {
     if (sortBy !== optionKey) return <ArrowUpDown className="w-4 h-4" />;
     return sortOrder === "asc" ? (
       <ArrowUp className="w-4 h-4" />
@@ -53,45 +55,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   };
 
   return (
-    <div className="space-y-6 p-4 bg-white border border-gray-200 rounded-lg">
+    <div className="space-y-6 p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
       <div className="flex items-center space-x-2">
-        <Filter className="w-5 h-5 text-gray-600" />
+        <Filter className="w-6 h-6 text-gray-600" />
         <h3 className="text-lg font-medium text-gray-900">Filters</h3>
-      </div>
-
-      <div className="space-y-2">
-        <h4 className="text-sm font-medium text-gray-700">Quick Filter</h4>
-        <Button
-          variant={showFavorites ? "default" : "ghost"}
-          size="sm"
-          onClick={() => onFavoritesChange(!showFavorites)}
-          className="w-full justify-start"
-        >
-          <Heart
-            className={`w-4 h-4 mr-2 ${showFavorites ? "fill-current" : ""}`}
-          />
-          Favorites Only
-        </Button>
-      </div>
-
-      <div className="space-y-2">
-        <h4 className="text-sm font-medium text-gray-700">Sort By</h4>
-        <div className="space-y-1">
-          {sortOptions.map((option) => (
-            <button
-              key={option.key}
-              onClick={() => handleSortChange(option.key)}
-              className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-lg transition-colors ${
-                sortBy === option.key
-                  ? "bg-blue-50 text-blue-700"
-                  : "hover:bg-gray-50 text-gray-600"
-              }`}
-            >
-              <span>{option.label}</span>
-              {getSortIcon(option.key)}
-            </button>
-          ))}
-        </div>
       </div>
 
       {availableTags.length > 0 && (
@@ -100,8 +67,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             <h4 className="text-sm font-medium text-gray-700">Tags</h4>
             {selectedTags.length > 0 && (
               <button
+                type="button"
                 onClick={() => onTagsChange([])}
-                className="text-xs text-gray-500 hover:text-gray-700"
+                className="text-xs text-gray-500 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 rounded"
+                aria-label="Clear all selected tags"
               >
                 Clear all
               </button>
@@ -113,14 +82,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               {selectedTags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full"
+                  className="inline-flex items-center px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full border border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
                   {tag}
                   <button
+                    type="button"
                     onClick={() => handleTagToggle(tag)}
-                    className="ml-1 hover:text-blue-600"
+                    className="ml-1 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 rounded"
+                    aria-label={`Remove ${tag} tag`}
                   >
-                    <X className="w-3 h-3" />
+                    <X className="w-4 h-4" />
                   </button>
                 </span>
               ))}
@@ -133,8 +104,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               .map((tag) => (
                 <button
                   key={tag}
+                  type="button"
                   onClick={() => handleTagToggle(tag)}
-                  className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                  className="block w-full text-left px-3 py-2.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+                  aria-label={`Toggle tag ${tag}`}
+                  aria-pressed={isTagSelected(tag)}
                 >
                   {tag}
                 </button>
@@ -142,6 +116,57 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </div>
         </div>
       )}
+
+      <div className="space-y-2">
+        <h4 className="text-sm font-medium text-gray-700">Quick Filter</h4>
+        <Button
+          type="button"
+          variant={showFavorites ? "default" : "ghost"}
+          size="sm"
+          onClick={() => onFavoritesChange(!showFavorites)}
+          className="w-full justify-start"
+          aria-pressed={showFavorites}
+        >
+          <Heart
+            className={`w-6 h-6 mr-2 ${showFavorites ? "fill-current" : ""}`}
+            aria-hidden="true"
+          />
+          Favorites Only
+        </Button>
+      </div>
+
+      <div className="space-y-2">
+        <h4 className="text-sm font-medium text-gray-700">Sort By</h4>
+        <div className="space-y-1" role="radiogroup" aria-label="Sort options">
+          {sortOptions.map((option) => (
+            <button
+              key={option.key}
+              onClick={() => handleSortChange(option.key)}
+              type="button"
+              role="radio"
+              aria-checked={sortBy === option.key}
+              aria-label={`${option.label}, ${sortBy === option.key ? (sortOrder === "asc" ? "ascending" : "descending") : "not selected"}`}
+              className={`w-full flex items-center justify-between px-3 py-2.5 text-sm rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+                sortBy === option.key
+                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                  : "hover:bg-gray-50 text-gray-600 border border-transparent"
+              }`}
+            >
+              <span>{option.label}</span>
+              <span className="flex items-center gap-2">
+                {getSortIcon(option.key)}
+                <span className="sr-only">
+                  {sortBy === option.key
+                    ? sortOrder === "asc"
+                      ? "Ascending"
+                      : "Descending"
+                    : ""}
+                </span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

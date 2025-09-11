@@ -33,6 +33,7 @@ export const UI = {
 export const DEFAULT_SETTINGS = {
   THEME: "light",
   VIEW_MODE: "grid",
+  LAYOUT_DENSITY: "comfortable",
 } as const;
 
 // Sort keys
@@ -62,7 +63,7 @@ export const SORT_ORDER = {
 
 // Export constants
 export const EXPORT = {
-  VERSION: "1.0.0",
+  VERSION: "1.1.0",
   FILENAME_PREFIX: "promptrium-export-",
   MIME_TYPE: "application/json",
 } as const;

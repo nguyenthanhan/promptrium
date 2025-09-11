@@ -13,6 +13,7 @@ export interface Prompt {
 export interface Settings {
   theme: "light" | "dark";
   view_mode: "grid" | "list";
+  layout_density: "compact" | "comfortable" | "expanded";
   last_backup: number;
 }
 
@@ -24,6 +25,8 @@ export type ModalType =
   | "export"
   | null;
 export type ViewMode = "grid" | "list";
+export type LayoutDensity = "compact" | "comfortable" | "expanded";
+export type SortKey = "updated" | "created" | "name" | "usage";
 
 export interface PromptFormData {
   title: string;
@@ -39,6 +42,13 @@ export interface PromptContextType {
   selectedPrompt: Prompt | null;
   isLoading: boolean;
 
+  // Filter state
+  searchQuery: string;
+  selectedTags: string[];
+  showFavorites: boolean;
+  sortBy: SortKey;
+  sortOrder: "asc" | "desc";
+
   addPrompt: (prompt: PromptFormData) => void;
   updatePrompt: (id: string, prompt: PromptFormData) => void;
   deletePrompt: (id: string) => void;
@@ -51,7 +61,7 @@ export interface PromptContextType {
   setSearchQuery: (query: string) => void;
   setSelectedTags: (tags: string[]) => void;
   setShowFavorites: (show: boolean) => void;
-  setSortOptions: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  setSortOptions: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
 
   exportData: () => void;
   importData: (file: File) => Promise<void>;
@@ -61,6 +71,7 @@ export interface PromptContextType {
 export interface PromptCardProps {
   prompt: Prompt;
   viewMode: ViewMode;
+  layoutDensity: LayoutDensity;
   onEdit: (prompt: Prompt) => void;
   onDelete: (prompt: Prompt) => void;
   onCopy: (prompt: Prompt) => void;
@@ -69,8 +80,8 @@ export interface PromptCardProps {
 
 export interface PromptFormProps {
   prompt?: Prompt;
-  onSubmit: (data: PromptFormData) => void;
-  onCancel: () => void;
+  onSubmit: (data: PromptFormData) => Promise<void> | void;
+  onCancel?: () => void;
   isLoading?: boolean;
 }
 
@@ -87,9 +98,9 @@ export interface FilterPanelProps {
   onTagsChange: (tags: string[]) => void;
   showFavorites: boolean;
   onFavoritesChange: (show: boolean) => void;
-  sortBy: string;
+  sortBy: SortKey;
   sortOrder: "asc" | "desc";
-  onSortChange: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  onSortChange: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
 }
 
 export interface ModalProps {
