@@ -104,7 +104,23 @@ export const usePromptDataOperations = ({
           throw new Error(ERROR_MESSAGES.OPERATIONS.INVALID_DATA_FORMAT);
         }
 
-        setPrompts(data.prompts);
+        // Sanitize prompts before persisting
+        const isValidPrompt = (p: any): p is Prompt =>
+          p &&
+          typeof p.id === "string" &&
+          typeof p.title === "string" &&
+          typeof p.content === "string" &&
+          Array.isArray(p.tags) &&
+          typeof p.created_at === "number" &&
+          typeof p.updated_at === "number" &&
+          typeof p.usage_count === "number" &&
+          typeof p.is_favorite === "boolean" &&
+          typeof p.description === "string";
+
+        const sanitized = Array.isArray(data.prompts)
+          ? data.prompts.filter(isValidPrompt)
+          : [];
+        setPrompts(sanitized);
         if (data.settings) {
           const validatedSettings = validateSettings(data.settings);
           setSettings((prev) => ({ ...prev, ...validatedSettings }));

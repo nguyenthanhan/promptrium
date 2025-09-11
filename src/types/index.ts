@@ -80,7 +80,7 @@ export interface PromptCardProps {
 
 export interface PromptFormProps {
   prompt?: Prompt;
-  onSubmit: (data: PromptFormData) => void;
+  onSubmit: (data: PromptFormData) => Promise<void> | void;
   onCancel?: () => void;
   isLoading?: boolean;
 }

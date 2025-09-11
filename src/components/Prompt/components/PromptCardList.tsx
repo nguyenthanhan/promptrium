@@ -38,7 +38,11 @@ export const PromptCardList: React.FC<PromptCardProps> = ({
             <div className="flex items-center justify-between mb-2">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <h3 className="text-lg font-semibold text-gray-900 truncate flex-1 mr-3">
+                  <h3
+                    className="text-lg font-semibold text-gray-900 truncate flex-1 mr-3"
+                    tabIndex={0}
+                    title={prompt.title}
+                  >
                     {prompt.title}
                   </h3>
                 </TooltipTrigger>
@@ -54,7 +58,11 @@ export const PromptCardList: React.FC<PromptCardProps> = ({
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <p className="text-sm text-gray-600 mb-3">
+                <p
+                  className="text-sm text-gray-600 mb-3"
+                  tabIndex={0}
+                  title={truncateText(prompt.content, 200)}
+                >
                   {truncateText(prompt.content, 200)}
                 </p>
               </TooltipTrigger>
@@ -66,7 +74,11 @@ export const PromptCardList: React.FC<PromptCardProps> = ({
             {prompt.description && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <p className="text-xs text-gray-500 mb-2">
+                  <p
+                    className="text-xs text-gray-500 mb-2"
+                    tabIndex={0}
+                    title={truncateText(prompt.description, 100)}
+                  >
                     {truncateText(prompt.description, 100)}
                   </p>
                 </TooltipTrigger>

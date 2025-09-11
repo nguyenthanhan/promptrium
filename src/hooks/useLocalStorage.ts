@@ -2,6 +2,16 @@ import { useState, useEffect, useRef } from "react";
 
 type SetValue<T> = (value: T | ((prevValue: T) => T)) => void;
 
+// Helper function to detect plain objects
+function isPlainObject(value: any): value is Record<string, any> {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    Object.prototype.toString.call(value) === "[object Object]"
+  );
+}
+
 export function useLocalStorage<T>(
   key: string,
   initialValue: T
@@ -10,20 +20,32 @@ export function useLocalStorage<T>(
   const [mounted, setMounted] = useState(false);
   const initialValueRef = useRef(initialValue);
 
+  // Update ref when key or initialValue changes
+  useEffect(() => {
+    initialValueRef.current = initialValue;
+  }, [key, initialValue]);
+
   // Initialize from localStorage after component mounts
   useEffect(() => {
-    setMounted(true);
     try {
       const item = window.localStorage.getItem(key);
       if (item) {
         const parsed = JSON.parse(item);
-        // Merge with initialValue to ensure missing keys get defaults
-        setStoredValue({ ...initialValueRef.current, ...parsed });
+        // Only merge if both parsed and initialValue are plain objects
+        if (isPlainObject(parsed) && isPlainObject(initialValueRef.current)) {
+          setStoredValue({ ...initialValueRef.current, ...parsed });
+        } else {
+          // Use parsed value directly for non-objects or when initialValue isn't an object
+          setStoredValue(parsed);
+        }
       }
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
+    } finally {
+      // Set mounted flag only after load completes to avoid extra render with defaults
+      setMounted(true);
     }
-  }, [key]); // Remove initialValue from dependencies
+  }, [key]);
 
   const setValue: SetValue<T> = (value) => {
     try {
