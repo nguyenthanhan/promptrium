@@ -4,13 +4,12 @@ import React from "react";
 import Image from "next/image";
 import PromptCard from "@/components/Prompt/PromptCard";
 import { Button } from "@/components/ui/button";
-import { Prompt, Settings } from "@/types";
+import { Prompt } from "@/types";
 import { Plus } from "lucide-react";
 
 interface PageMainContentProps {
   prompts: Prompt[];
   filteredPrompts: Prompt[];
-  settings: Settings;
   mounted: boolean;
   onCreateClick: () => void;
   onEditPrompt: (prompt: Prompt) => void;
@@ -22,7 +21,6 @@ interface PageMainContentProps {
 export const PageMainContent: React.FC<PageMainContentProps> = ({
   prompts,
   filteredPrompts,
-  settings,
   mounted,
   onCreateClick,
   onEditPrompt,
@@ -33,7 +31,7 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
   if (!mounted) {
     // Loading state during hydration
     return (
-      <main className="flex-1 pr-4">
+      <main className="w-full">
         <div className="text-center py-12">
           <div className="animate-pulse">
             <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4"></div>
@@ -47,7 +45,7 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
 
   if (filteredPrompts.length === 0) {
     return (
-      <main className="flex-1 pr-4">
+      <main className="w-full">
         <div className="text-center py-12">
           {!Array.isArray(prompts) || prompts.length === 0 ? (
             // Empty state - no prompts
@@ -104,30 +102,14 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
   }
 
   return (
-    <main className="flex-1 pr-4">
-      <div
-        className={
-          settings.view_mode === "grid"
-            ? `grid grid-cols-1 ${
-                settings.layout_density === "compact"
-                  ? "lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
-                  : settings.layout_density === "comfortable"
-                    ? "lg:grid-cols-2 xl:grid-cols-3 gap-6"
-                    : "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-8"
-              }`
-            : settings.layout_density === "compact"
-              ? "space-y-3"
-              : settings.layout_density === "comfortable"
-                ? "space-y-4"
-                : "space-y-6"
-        }
-      >
+    <main className="w-full">
+      <div className="grid grid-cols-3 gap-4">
         {filteredPrompts.map((prompt) => (
           <PromptCard
             key={prompt.id}
             prompt={prompt}
-            viewMode={settings.view_mode}
-            layoutDensity={settings.layout_density}
+            viewMode="grid"
+            layoutDensity="comfortable"
             onEdit={onEditPrompt}
             onDelete={onDeletePrompt}
             onCopy={onCopyPrompt}

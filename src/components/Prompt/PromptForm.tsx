@@ -110,7 +110,7 @@ const PromptForm = forwardRef<PromptFormRef, ExtendedPromptFormProps>(
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6"
+        className="px-3 sm:px-6 pt-3 pb-4 sm:pt-4 sm:pb-6 space-y-3"
         noValidate
       >
         <TitleField

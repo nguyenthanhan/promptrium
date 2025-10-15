@@ -33,6 +33,63 @@ body {
     sans-serif;
 }
 
+/* Custom scrollbar styles */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Horizontal scrollbar - thinner for tags */
+.scrollbar-thin-horizontal {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.scrollbar-thin-horizontal:hover {
+  scrollbar-color: #d1d5db transparent;
+}
+
+.scrollbar-thin-horizontal::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scrollbar-thin-horizontal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin-horizontal::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 2px;
+}
+
+.scrollbar-thin-horizontal:hover::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+}
+
+.scrollbar-thin-horizontal::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   [class*="animate-"],

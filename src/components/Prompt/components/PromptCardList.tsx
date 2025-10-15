@@ -56,36 +56,14 @@ export const PromptCardList: React.FC<PromptCardProps> = ({
               />
             </div>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <p
-                  className="text-sm text-gray-600 mb-3"
-                  tabIndex={0}
-                  title={truncateText(prompt.content, 200)}
-                >
-                  {truncateText(prompt.content, 200)}
-                </p>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="max-w-md whitespace-pre-wrap">{prompt.content}</p>
-              </TooltipContent>
-            </Tooltip>
+            <p className="text-sm text-gray-600 mb-3">
+              {truncateText(prompt.content, 200)}
+            </p>
 
             {prompt.description && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <p
-                    className="text-xs text-gray-500 mb-2"
-                    tabIndex={0}
-                    title={truncateText(prompt.description, 100)}
-                  >
-                    {truncateText(prompt.description, 100)}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="max-w-md">{prompt.description}</p>
-                </TooltipContent>
-              </Tooltip>
+              <p className="text-xs text-gray-500 mb-2">
+                {truncateText(prompt.description, 100)}
+              </p>
             )}
 
             <PromptCardMetadata

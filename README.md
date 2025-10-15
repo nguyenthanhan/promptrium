@@ -33,6 +33,7 @@
 
 ### 🎨 **User Experience**
 
+- **Modern Layout**: A new, improved layout with a responsive sidebar, header, and main content area.
 - **Dual View Modes**: Switch between grid and list views
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **One-Click Copy**: Copy prompts to clipboard with visual feedback
@@ -52,6 +53,7 @@
 - **Modern React**: Built with React 19 and modern hooks
 - **Component Architecture**: Well-structured, reusable components
 - **Performance Optimized**: Memoized components and efficient state management
+- **Code Formatting**: Integrated with Prettier for consistent code style.
 
 ## 🚀 Getting Started
 
@@ -101,6 +103,7 @@ pnpm start        # Start production server
 
 # Maintenance
 pnpm lint         # Run ESLint
+pnpm format       # Format code with Prettier
 pnpm clean        # Clean build artifacts
 
 # Release Management

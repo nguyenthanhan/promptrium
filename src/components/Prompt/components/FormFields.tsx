@@ -34,7 +34,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   const InputComponent = type === "textarea" ? "textarea" : "input";
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label} {required && "*"}
       </label>
@@ -45,7 +45,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={type === "textarea" ? rows : undefined}
-        className={`w-full px-3 py-2 border rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+        className={`w-full ${type === "input" ? "h-10" : ""} px-3 py-2 border rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
           error ? "border-red-300 focus:ring-red-500" : "border-gray-300"
         }`}
         disabled={disabled}
@@ -108,6 +108,6 @@ export const ContentField: React.FC<{
     disabled={disabled}
     required
     type="textarea"
-    rows={8}
+    rows={12}
   />
 );
