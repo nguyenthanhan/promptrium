@@ -1,19 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SortKey } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   Filter,
-  Heart,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
@@ -21,20 +17,18 @@ import {
 } from "lucide-react";
 
 interface HeaderFiltersProps {
-  showFavorites: boolean;
-  onFavoritesChange: (show: boolean) => void;
   sortBy: SortKey;
   sortOrder: "asc" | "desc";
   onSortChange: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
 }
 
 const HeaderFilters: React.FC<HeaderFiltersProps> = ({
-  showFavorites,
-  onFavoritesChange,
   sortBy,
   sortOrder,
   onSortChange,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleSortChange = (newSortBy: SortKey) => {
     if (sortBy === newSortBy) {
       onSortChange(newSortBy, sortOrder === "asc" ? "desc" : "asc");
@@ -51,8 +45,6 @@ const HeaderFilters: React.FC<HeaderFiltersProps> = ({
   const sortOptions: { key: SortKey; label: string }[] = [
     { key: "updated", label: "Last Updated" },
     { key: "created", label: "Created Date" },
-    { key: "name", label: "Name" },
-    { key: "usage", label: "Usage Count" },
   ];
 
   const getSortIcon = (optionKey: SortKey) => {
@@ -64,41 +56,25 @@ const HeaderFilters: React.FC<HeaderFiltersProps> = ({
     );
   };
 
-  const getCurrentSortLabel = () => {
-    const currentSort = sortOptions.find((option) => option.key === sortBy);
-    return currentSort?.label || "Last Updated";
-  };
-
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           size="default"
-          className="shadow-sm hover:shadow-md transition-all duration-200"
+          className="border border-gray-200 hover:bg-gray-100 transition-all duration-200"
         >
-          <Filter className="w-5 h-5" />
-          <ChevronDown className="w-4 h-4 ml-2" />
+          <Filter className="w-5 h-5 mr-2" />
+          Sort
+          <ChevronDown
+            className={`w-4 h-4 ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+          />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
         className="w-64 bg-white shadow-lg border border-gray-200"
       >
-        <DropdownMenuLabel>Quick Filter</DropdownMenuLabel>
-        <DropdownMenuItem
-          onClick={() => onFavoritesChange(!showFavorites)}
-          className={`${showFavorites ? "bg-blue-50 text-blue-700" : ""}`}
-        >
-          <Heart
-            className={`w-5 h-5 mr-2 ${showFavorites ? "fill-current" : ""}`}
-          />
-          Favorites Only
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuLabel>Sort By</DropdownMenuLabel>
         <DropdownMenuRadioGroup
           value={sortBy}
           onValueChange={handleDropdownSortChange}

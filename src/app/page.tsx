@@ -3,15 +3,14 @@
 import React from "react";
 import { usePageLogic } from "@/hooks/usePageLogic";
 import { PageHeader } from "@/components/Layout/PageHeader";
-import { PageSidebar } from "@/components/Layout/PageSidebar";
 import { PageMainContent } from "@/components/Layout/PageMainContent";
 import { PageModals } from "@/components/Layout/PageModals";
+import { FilterSidebar } from "@/components/Search/FilterSidebar";
 
 export default function Home() {
   const {
     // Data
     prompts,
-    settings,
     filteredPrompts,
     availableTags,
     mounted,
@@ -21,18 +20,14 @@ export default function Home() {
     modalType,
     searchQuery,
     selectedTags,
-    showFavorites,
     sortBy,
     sortOrder,
 
     // Handlers
     handleSearchChange,
     handleTagsChange,
-    handleFavoritesChange,
     handleSortChange,
     handleImport,
-    handleViewModeChange,
-    handleLayoutDensityChange,
     openCreateModal,
     openEditModal,
     openDeleteModal,
@@ -47,35 +42,31 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <PageHeader
-        settings={settings}
-        showFavorites={showFavorites}
+        searchQuery={searchQuery}
+        availableTags={availableTags}
+        selectedTags={selectedTags}
         sortBy={sortBy}
         sortOrder={sortOrder}
+        onSearchChange={handleSearchChange}
+        onTagsChange={handleTagsChange}
         onCreateClick={openCreateModal}
-        onViewModeChange={handleViewModeChange}
-        onLayoutDensityChange={handleLayoutDensityChange}
-        onFavoritesChange={handleFavoritesChange}
         onSortChange={handleSortChange}
         onExport={exportData}
         onImport={handleImport}
       />
 
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-6">
-          <PageSidebar
-            prompts={prompts}
-            availableTags={availableTags}
-            searchQuery={searchQuery}
-            selectedTags={selectedTags}
-            mounted={mounted}
-            onSearchChange={handleSearchChange}
-            onTagsChange={handleTagsChange}
-          />
-
+      <div className="px-4 py-4 flex gap-4">
+        <FilterSidebar
+          availableTags={availableTags}
+          selectedTags={selectedTags}
+          prompts={prompts}
+          onTagsChange={handleTagsChange}
+        />
+        
+        <div className="flex-1">
           <PageMainContent
             prompts={prompts}
             filteredPrompts={filteredPrompts}
-            settings={settings}
             mounted={mounted}
             onCreateClick={openCreateModal}
             onEditPrompt={openEditModal}

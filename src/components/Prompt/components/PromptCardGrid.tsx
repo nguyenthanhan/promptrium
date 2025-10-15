@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { PromptCardProps } from "@/types";
 import { truncateText } from "@/utils/helpers";
 import {
@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import { usePromptCard } from "../hooks/usePromptCard";
 import { PromptCardActions } from "./PromptCardActions";
-import { PromptCardFavorite } from "./PromptCardFavorite";
 import { PromptCardTags } from "./PromptCardTags";
-import { PromptCardMetadata } from "./PromptCardMetadata";
 
 export const PromptCardGrid: React.FC<PromptCardProps> = ({
   prompt,
@@ -28,17 +26,36 @@ export const PromptCardGrid: React.FC<PromptCardProps> = ({
     onCopy,
   });
 
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [showGradient, setShowGradient] = useState(false);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      if (contentRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+        const isScrollable = scrollHeight > clientHeight;
+        const isAtBottom = scrollHeight - scrollTop - clientHeight < 1;
+        setShowGradient(isScrollable && !isAtBottom);
+      }
+    };
+
+    checkScroll();
+    const element = contentRef.current;
+    if (element) {
+      element.addEventListener("scroll", checkScroll);
+      return () => element.removeEventListener("scroll", checkScroll);
+    }
+  }, [prompt.content, prompt.description]);
+
   return (
     <TooltipProvider>
       <div
-        className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 h-full flex flex-col ${getPadding(layoutDensity)}`}
+        className={`bg-white border border-gray-200 rounded-lg transition-all duration-200 h-full flex flex-col ${getPadding(layoutDensity)}`}
       >
-        <div
-          className={`flex items-center justify-between ${getSpacing(layoutDensity)}`}
-        >
+        <div className={getSpacing(layoutDensity)}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <h3 className="text-lg font-semibold text-gray-900 truncate flex-1 mr-3">
+              <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 cursor-pointer">
                 {prompt.title}
               </h3>
             </TooltipTrigger>
@@ -46,58 +63,43 @@ export const PromptCardGrid: React.FC<PromptCardProps> = ({
               <p className="max-w-xs">{prompt.title}</p>
             </TooltipContent>
           </Tooltip>
-          <PromptCardFavorite
-            prompt={prompt}
-            onToggleFavorite={onToggleFavorite}
-          />
         </div>
 
-        <div className="flex-1 mb-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <p className="text-sm text-gray-600 mb-2">
-                {truncateText(prompt.content, 150)}
-              </p>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="max-w-md whitespace-pre-wrap">{prompt.content}</p>
-            </TooltipContent>
-          </Tooltip>
+        <div 
+          ref={contentRef}
+          className="overflow-y-auto max-h-[168px] scrollbar-custom relative pr-2 mb-3"
+        >
+          <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">
+            {prompt.content}
+          </p>
           {prompt.description && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <p className="text-xs text-gray-500">
-                  {truncateText(prompt.description, 80)}
-                </p>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="max-w-md">{prompt.description}</p>
-              </TooltipContent>
-            </Tooltip>
+            <p className="text-xs text-gray-500 whitespace-pre-wrap">
+              {prompt.description}
+            </p>
+          )}
+          {/* Gradient fade indicator at bottom - only show when scrollable and not at bottom */}
+          {showGradient && (
+            <div className="sticky bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none -mt-8"></div>
           )}
         </div>
 
-        <PromptCardTags
-          tags={prompt.tags}
-          maxTags={3}
-          className={getSpacing(layoutDensity)}
-        />
+        <div className="mt-auto space-y-3">
+          <PromptCardTags
+            tags={prompt.tags}
+            maxTags={3}
+            className=""
+          />
 
-        <PromptCardMetadata
-          updatedAt={prompt.updated_at}
-          usageCount={prompt.usage_count}
-          variant="grid"
-          className={getSpacing(layoutDensity)}
-        />
-
-        <PromptCardActions
-          prompt={prompt}
-          copied={copied}
-          onCopy={handleCopy}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          variant="grid"
-        />
+          <PromptCardActions
+            prompt={prompt}
+            copied={copied}
+            onCopy={handleCopy}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onToggleFavorite={onToggleFavorite}
+            variant="grid"
+          />
+        </div>
       </div>
     </TooltipProvider>
   );

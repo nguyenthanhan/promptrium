@@ -18,21 +18,16 @@ export const PromptCardTags: React.FC<PromptCardTagsProps> = ({
   }
 
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
-      {tags.slice(0, maxTags).map((tag, i) => (
+    <div className={cn("flex gap-2 overflow-x-auto scrollbar-thin-horizontal pb-2", className)}>
+      {tags.map((tag, i) => (
         <span
           key={`${tag}-${i}`}
-          className="inline-flex items-center px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full border border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+          className="inline-flex items-center px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full border border-blue-200 hover:bg-blue-100 transition-all duration-200 whitespace-nowrap flex-shrink-0"
         >
           <Tag className="w-4 h-4 mr-1.5" />
           {tag}
         </span>
       ))}
-      {tags.length > maxTags && (
-        <span className="inline-flex items-center px-3 py-1.5 text-sm text-gray-500 bg-gray-50 rounded-full border border-gray-200">
-          +{tags.length - maxTags} more
-        </span>
-      )}
     </div>
   );
 };

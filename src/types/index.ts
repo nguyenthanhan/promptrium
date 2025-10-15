@@ -45,7 +45,6 @@ export interface PromptContextType {
   // Filter state
   searchQuery: string;
   selectedTags: string[];
-  showFavorites: boolean;
   sortBy: SortKey;
   sortOrder: "asc" | "desc";
 
@@ -60,7 +59,6 @@ export interface PromptContextType {
 
   setSearchQuery: (query: string) => void;
   setSelectedTags: (tags: string[]) => void;
-  setShowFavorites: (show: boolean) => void;
   setSortOptions: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
 
   exportData: () => void;
@@ -96,8 +94,6 @@ export interface FilterPanelProps {
   availableTags: string[];
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
-  showFavorites: boolean;
-  onFavoritesChange: (show: boolean) => void;
   sortBy: SortKey;
   sortOrder: "asc" | "desc";
   onSortChange: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;

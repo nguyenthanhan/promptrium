@@ -7,26 +7,22 @@ import { Prompt, ModalType, PromptFormData, SortKey } from "@/types";
 export const usePageLogic = () => {
   const {
     prompts,
-    settings,
     filteredPrompts,
     addPrompt,
     updatePrompt,
     deletePrompt,
     toggleFavorite,
     incrementUsage,
-    updateSettings,
     exportData,
     importData,
     // Filter state
     searchQuery,
     selectedTags,
-    showFavorites,
     sortBy,
     sortOrder,
     // Filter actions
     setSearchQuery,
     setSelectedTags,
-    setShowFavorites,
     setSortOptions,
   } = usePrompts();
 
@@ -63,13 +59,6 @@ export const usePageLogic = () => {
     [setSelectedTags]
   );
 
-  const handleFavoritesChange = useCallback(
-    (show: boolean) => {
-      setShowFavorites(show);
-    },
-    [setShowFavorites]
-  );
-
   const handleSortChange = useCallback(
     (newSortBy: SortKey, newSortOrder: "asc" | "desc") => {
       setSortOptions(newSortBy, newSortOrder);
@@ -95,28 +84,6 @@ export const usePageLogic = () => {
       event.target.value = "";
     },
     [importData, toast]
-  );
-
-  const handleViewModeChange = useCallback(
-    (viewMode: string) => {
-      if (viewMode === "grid" || viewMode === "list") {
-        updateSettings({ view_mode: viewMode });
-      }
-    },
-    [updateSettings]
-  );
-
-  const handleLayoutDensityChange = useCallback(
-    (density: string) => {
-      if (
-        density === "compact" ||
-        density === "comfortable" ||
-        density === "expanded"
-      ) {
-        updateSettings({ layout_density: density });
-      }
-    },
-    [updateSettings]
   );
 
   // Modal handlers
@@ -177,7 +144,6 @@ export const usePageLogic = () => {
   return {
     // Data
     prompts,
-    settings,
     filteredPrompts,
     availableTags,
     mounted,
@@ -187,18 +153,14 @@ export const usePageLogic = () => {
     modalType,
     searchQuery,
     selectedTags,
-    showFavorites,
     sortBy,
     sortOrder,
 
     // Handlers
     handleSearchChange,
     handleTagsChange,
-    handleFavoritesChange,
     handleSortChange,
     handleImport,
-    handleViewModeChange,
-    handleLayoutDensityChange,
     openCreateModal,
     openEditModal,
     openDeleteModal,

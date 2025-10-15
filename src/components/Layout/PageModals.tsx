@@ -54,8 +54,8 @@ export const PageModals: React.FC<PageModalsProps> = ({
           if (!open) onCloseModal();
         }}
       >
-        <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[65vw] max-h-[90vh] flex flex-col p-0">
-          <DialogHeader className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6 py-4 rounded-t-lg">
+        <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[65vw] max-h-[90vh] flex flex-col !p-0">
+          <DialogHeader className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 rounded-t-lg">
             <div className="flex items-center justify-between">
               <DialogTitle>
                 {modalType === "create" ? "Create New Prompt" : "Edit Prompt"}

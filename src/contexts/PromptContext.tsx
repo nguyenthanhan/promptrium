@@ -50,7 +50,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
   // Filter state
   const [searchQuery, setSearchQueryInternal] = useState("");
   const [selectedTags, setSelectedTagsInternal] = useState<string[]>([]);
-  const [showFavorites, setShowFavoritesInternal] = useState(false);
   const [sortBy, setSortBy] = useState<SortKey>(SORT_KEYS.UPDATED);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">(SORT_ORDER.DESC);
 
@@ -61,10 +60,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const setSelectedTags = useCallback((tags: string[]) => {
     setSelectedTagsInternal(tags);
-  }, []);
-
-  const setShowFavorites = useCallback((show: boolean) => {
-    setShowFavoritesInternal(show);
   }, []);
 
   // Get prompt data operations
@@ -104,10 +99,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
       );
     }
 
-    if (showFavorites) {
-      filtered = filtered.filter((prompt) => prompt.is_favorite);
-    }
-
     filtered.sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
@@ -130,7 +121,7 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     return filtered;
-  }, [prompts, searchQuery, selectedTags, showFavorites, sortBy, sortOrder]);
+  }, [prompts, searchQuery, selectedTags, sortBy, sortOrder]);
 
   const setSortOptions = useCallback(
     (newSortBy: SortKey, newSortOrder: "asc" | "desc") => {
@@ -159,7 +150,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
     setSelectedPrompt(null);
     setSearchQueryInternal("");
     setSelectedTagsInternal([]);
-    setShowFavoritesInternal(false);
     setSortOptions(SORT_KEYS.UPDATED, SORT_ORDER.DESC);
   }, [
     originalClearAllData,
@@ -197,7 +187,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
       // Filter state
       searchQuery,
       selectedTags,
-      showFavorites,
       sortBy,
       sortOrder,
       // Actions
@@ -210,7 +199,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
       updateSettings,
       setSearchQuery,
       setSelectedTags,
-      setShowFavorites,
       setSortOptions,
       exportData,
       importData,
@@ -224,7 +212,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
       isLoading,
       searchQuery,
       selectedTags,
-      showFavorites,
       sortBy,
       sortOrder,
       // Only include stable callback functions in dependencies
@@ -237,7 +224,6 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
       updateSettings,
       setSearchQuery,
       setSelectedTags,
-      setShowFavorites,
       setSortOptions,
       exportData,
       importData,

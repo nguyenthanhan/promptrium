@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useId } from "react";
+import React, { useState, useCallback, useId, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { X, Plus, AlertCircle } from "lucide-react";
 import { VALIDATION, ERROR_MESSAGES } from "@/constants";
@@ -21,6 +21,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
   const [newTag, setNewTag] = useState("");
   const [tagError, setTagError] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Generate unique IDs to prevent conflicts when multiple instances exist
   const baseId = useId();
@@ -44,9 +45,23 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 
     if (!tags.includes(tag)) {
       onTagsChange([...tags, tag]);
-      setNewTag("");
       setTagError("");
+      
+      // Scroll to show the newly added tag
+      if (containerRef.current) {
+        const scrollableParent = containerRef.current.closest('.overflow-y-auto');
+        if (scrollableParent) {
+          setTimeout(() => {
+            containerRef.current?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'end',
+            });
+          }, 100);
+        }
+      }
     }
+    // Always clear input after attempting to add
+    setNewTag("");
   }, [newTag, tags, onTagsChange]);
 
   const handleRemoveTag = useCallback(
@@ -64,6 +79,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       }
       if (!tags.includes(tagToAdd)) {
         onTagsChange([...tags, tagToAdd]);
+        setNewTag("");
         setTagError("");
       }
     },
@@ -89,7 +105,6 @@ export const TagsInput: React.FC<TagsInputProps> = ({
           );
           if (exactMatch) {
             handleSelectAvailableTag(exactMatch);
-            setNewTag("");
             setShowSuggestions(false);
             return;
           }
@@ -106,6 +121,19 @@ export const TagsInput: React.FC<TagsInputProps> = ({
   const handleInputFocus = useCallback(() => {
     if (newTag.trim().length > 0) {
       setShowSuggestions(true);
+    }
+    
+    // Scroll to tags section when input is focused
+    if (containerRef.current) {
+      const scrollableParent = containerRef.current.closest('.overflow-y-auto');
+      if (scrollableParent) {
+        setTimeout(() => {
+          containerRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+          });
+        }, 100);
+      }
     }
   }, [newTag]);
 
@@ -144,7 +172,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
   const displayError = error || tagError;
 
   return (
-    <div className="space-y-2">
+    <div ref={containerRef} className="space-y-1">
       <label
         htmlFor={inputId}
         className="block text-sm font-medium text-gray-700"
@@ -188,7 +216,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           placeholder="Add a tag..."
-          className={`flex-1 px-3 py-2 border rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+          className={`flex-1 h-10 px-3 py-2 border rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
             displayError
               ? "border-red-300 focus:ring-red-500"
               : "border-gray-300"
@@ -200,10 +228,11 @@ export const TagsInput: React.FC<TagsInputProps> = ({
         <Button
           type="button"
           variant="outline"
-          size="sm"
+          size="default"
           onClick={handleAddTag}
           disabled={!newTag.trim() || disabled}
           aria-label="Add tag"
+          className="px-3"
         >
           <Plus className="w-4 h-4" />
         </Button>
