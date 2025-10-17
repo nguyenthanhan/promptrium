@@ -69,9 +69,8 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       onTagsChange([...tags, tag]);
       setTagError("");
       setShouldScrollToEnd(true);
+      setNewTag("");
     }
-    // Always clear input after attempting to add
-    setNewTag("");
   }, [newTag, tags, onTagsChange]);
 
   const handleRemoveTag = useCallback(
