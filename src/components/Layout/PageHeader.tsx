@@ -97,10 +97,10 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
             </div>
 
             <Button
-              variant="default"
+              variant="outline"
               size="default"
               onClick={onCreateClick}
-              className="border border-gray-200 shadow-none hover:shadow-none hover:bg-gray-100 transition-all duration-200"
+              className="transition-all duration-200 border-gray-200 hover:bg-gray-100"
               aria-label="Create a new prompt"
             >
               <Plus className="w-5 h-5 mr-2" />
