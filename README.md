@@ -33,8 +33,8 @@
 
 ### 🎨 **User Experience**
 
-- **Modern Layout**: A new, improved layout with a responsive sidebar, header, and main content area.
-- **Dual View Modes**: Switch between grid and list views
+- **Modern Layout**: A new, improved layout with a responsive sidebar, header, and main content area
+- **Grid View**: Clean 3-column grid layout for optimal prompt browsing
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **One-Click Copy**: Copy prompts to clipboard with visual feedback
 - **Toast Notifications**: Immediate feedback for all user actions

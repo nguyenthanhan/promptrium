@@ -4,13 +4,11 @@ import { cn } from "@/utils/helpers";
 
 interface PromptCardTagsProps {
   tags: string[];
-  maxTags?: number;
   className?: string;
 }
 
 export const PromptCardTags: React.FC<PromptCardTagsProps> = ({
   tags,
-  maxTags = 3,
   className = "",
 }) => {
   if (tags.length === 0) {
@@ -18,7 +16,12 @@ export const PromptCardTags: React.FC<PromptCardTagsProps> = ({
   }
 
   return (
-    <div className={cn("flex gap-2 overflow-x-auto scrollbar-thin-horizontal pb-2", className)}>
+    <div
+      className={cn(
+        "flex gap-2 overflow-x-auto scrollbar-thin-horizontal pb-2",
+        className
+      )}
+    >
       {tags.map((tag, i) => (
         <span
           key={`${tag}-${i}`}

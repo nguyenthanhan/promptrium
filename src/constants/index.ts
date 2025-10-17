@@ -40,16 +40,12 @@ export const DEFAULT_SETTINGS = {
 export const SORT_KEYS = {
   UPDATED: "updated",
   CREATED: "created",
-  NAME: "name",
-  USAGE: "usage",
 } as const;
 
 // Sort options
 export const SORT_OPTIONS = [
   { key: SORT_KEYS.UPDATED, label: "Last Updated" },
   { key: SORT_KEYS.CREATED, label: "Created Date" },
-  { key: SORT_KEYS.NAME, label: "Name" },
-  { key: SORT_KEYS.USAGE, label: "Usage Count" },
 ] as const satisfies ReadonlyArray<{
   key: (typeof SORT_KEYS)[keyof typeof SORT_KEYS];
   label: string;

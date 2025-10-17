@@ -11,7 +11,6 @@ import { Prompt, Settings, PromptContextType, SortKey } from "@/types";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePromptDataOperations } from "@/hooks/usePromptDataOperations";
 import { PromptDataProvider, usePromptData } from "./PromptDataContext";
-// Removed PromptFiltersProvider - filter logic is now integrated into PromptContext
 
 import {
   STORAGE_KEYS,
@@ -102,17 +101,11 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
     filtered.sort((a, b) => {
       let comparison = 0;
       switch (sortBy) {
-        case SORT_KEYS.NAME:
-          comparison = a.title.localeCompare(b.title);
-          break;
         case SORT_KEYS.CREATED:
           comparison = a.created_at - b.created_at;
           break;
         case SORT_KEYS.UPDATED:
           comparison = a.updated_at - b.updated_at;
-          break;
-        case SORT_KEYS.USAGE:
-          comparison = a.usage_count - b.usage_count;
           break;
         default:
           comparison = a.updated_at - b.updated_at;
@@ -151,10 +144,7 @@ const InternalPromptProvider: React.FC<{ children: React.ReactNode }> = ({
     setSearchQueryInternal("");
     setSelectedTagsInternal([]);
     setSortOptions(SORT_KEYS.UPDATED, SORT_ORDER.DESC);
-  }, [
-    originalClearAllData,
-    setSortOptions,
-  ]);
+  }, [originalClearAllData, setSortOptions]);
 
   const selectPrompt = useCallback((prompt: Prompt | null) => {
     setSelectedPrompt(prompt);

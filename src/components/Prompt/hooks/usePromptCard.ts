@@ -1,5 +1,5 @@
 import { useClipboard } from "@/hooks/useClipboard";
-import { Prompt, LayoutDensity } from "@/types";
+import { Prompt } from "@/types";
 
 interface UsePromptCardProps {
   prompt: Prompt;
@@ -21,36 +21,8 @@ export const usePromptCard = ({ prompt, onCopy }: UsePromptCardProps) => {
     }
   };
 
-  const getPadding = (layoutDensity?: LayoutDensity) => {
-    switch (layoutDensity) {
-      case "compact":
-        return "p-4";
-      case "comfortable":
-        return "p-6";
-      case "expanded":
-        return "p-8";
-      default:
-        return "p-6";
-    }
-  };
-
-  const getSpacing = (layoutDensity?: LayoutDensity) => {
-    switch (layoutDensity) {
-      case "compact":
-        return "mb-3";
-      case "comfortable":
-        return "mb-4";
-      case "expanded":
-        return "mb-6";
-      default:
-        return "mb-4";
-    }
-  };
-
   return {
     copied,
     handleCopy,
-    getPadding,
-    getSpacing,
   };
 };
