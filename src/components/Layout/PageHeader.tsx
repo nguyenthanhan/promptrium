@@ -6,12 +6,7 @@ import { SortKey } from "@/types";
 import HeaderFilters from "@/components/Search/HeaderFilters";
 import SearchBar from "@/components/Search/SearchBar";
 import { Button } from "@/components/ui/button";
-import {
-  Plus,
-  Download,
-  Upload,
-  Github,
-} from "lucide-react";
+import { Plus, Download, Upload, Github } from "lucide-react";
 
 interface PageHeaderProps {
   searchQuery: string;
@@ -49,7 +44,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               height={40}
               className="w-10 h-10"
             />
-            <h1 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Promptrium</h1>
+            <h1 className="text-2xl font-bold text-gray-900 whitespace-nowrap">
+              Promptrium
+            </h1>
           </div>
 
           {/* Search */}
@@ -114,6 +111,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               href="https://github.com/nguyenthanhan/promptrium"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="View source code on GitHub"
               className="inline-flex items-center justify-center font-medium rounded-lg p-2 border border-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 text-sm bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-gray-500"
             >
               <Github className="w-4 h-4" />
