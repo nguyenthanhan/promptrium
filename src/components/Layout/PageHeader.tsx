@@ -65,7 +65,6 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               sortOrder={sortOrder}
               onSortChange={onSortChange}
             />
-
             <Button
               variant="ghost"
               size="default"
@@ -75,7 +74,6 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               <Download className="w-5 h-5 mr-2" />
               Export
             </Button>
-
             <div className="relative">
               <input
                 type="file"
@@ -95,7 +93,6 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
                 Import
               </Button>
             </div>
-
             <Button
               variant="outline"
               size="default"
@@ -107,15 +104,17 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               New Prompt
             </Button>
 
-            <a
-              href="https://github.com/nguyenthanhan/promptrium"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="View source code on GitHub"
-              className="inline-flex items-center justify-center font-medium rounded-lg p-2 border border-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 text-sm bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-gray-500"
-            >
-              <Github className="w-4 h-4" />
-            </a>
+            <Button variant="ghost" size="icon" asChild>
+              <a
+                href="https://github.com/nguyenthanhan/promptrium"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View source code on GitHub"
+                className="border border-gray-200 transition-all duration-200 hover:bg-gray-100"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+            </Button>
           </div>
         </div>
       </div>
