@@ -78,11 +78,11 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
     <div className="flex items-center space-x-3">
       <Button
         type="button"
-        variant="default"
+        variant="ghost"
         size="default"
         onClick={onCopy}
         disabled={copied}
-        className={`flex-1 border border-gray-200 !shadow-none hover:!shadow-none hover:bg-gray-100 transition-all duration-200 ${
+        className={`flex-1 border border-border hover:bg-hover transition-all duration-200 ${
           copied
             ? "bg-blue-500 text-white cursor-not-allowed"
             : ""
@@ -106,7 +106,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
         variant="ghost"
         size="default"
         onClick={() => onEdit(prompt)}
-        className="w-10 h-10 p-2 border border-gray-200 hover:bg-gray-100 transition-all duration-200"
+        className="w-10 h-10 p-2 border border-border hover:bg-hover transition-all duration-200"
         aria-label="Edit prompt"
       >
         <Edit3 className="w-5 h-5" />
@@ -117,8 +117,8 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
           variant="ghost"
           size="default"
           onClick={() => onToggleFavorite(prompt)}
-          className={`w-10 h-10 p-2 border border-gray-200 hover:bg-gray-100 transition-all duration-200 ${
-            prompt.is_favorite ? "text-red-500" : "text-gray-400"
+          className={`w-10 h-10 p-2 border border-border  hover:bg-hover transition-all duration-200 ${
+            prompt.is_favorite ? "text-red-500" : "text-card-foreground"
           }`}
           aria-label={prompt.is_favorite ? "Remove from favorites" : "Add to favorites"}
         >
@@ -130,7 +130,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
         variant="ghost"
         size="default"
         onClick={() => onDelete(prompt)}
-        className="w-10 h-10 p-2 border border-gray-200 text-red-500 hover:text-red-700 hover:bg-gray-100 transition-all duration-200"
+        className="w-10 h-10 p-2 border border-border  text-destructive hover:text-destructive hover:bg-hover transition-all duration-200"
         aria-label="Delete prompt"
       >
         <Trash2 className="w-5 h-5" />

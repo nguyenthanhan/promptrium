@@ -62,7 +62,7 @@ const HeaderFilters: React.FC<HeaderFiltersProps> = ({
         <Button
           variant="ghost"
           size="default"
-          className="border border-gray-200 hover:bg-gray-100 transition-all duration-200"
+          className="border border-border hover:bg-hover transition-all duration-200"
         >
           <Filter className="w-5 h-5 mr-2" />
           Sort
@@ -73,14 +73,18 @@ const HeaderFilters: React.FC<HeaderFiltersProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-64 bg-white shadow-lg border border-gray-200"
+        className="w-64"
       >
         <DropdownMenuRadioGroup
           value={sortBy}
           onValueChange={handleDropdownSortChange}
         >
           {sortOptions.map((option) => (
-            <DropdownMenuRadioItem key={option.key} value={option.key}>
+            <DropdownMenuRadioItem 
+              key={option.key} 
+              value={option.key}
+              className="cursor-pointer"
+            >
               <div className="flex items-center justify-between w-full">
                 <span>{option.label}</span>
                 {getSortIcon(option.key)}

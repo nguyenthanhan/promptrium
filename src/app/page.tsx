@@ -40,7 +40,7 @@ export default function Home() {
   } = usePageLogic();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <PageHeader
         searchQuery={searchQuery}
         sortBy={sortBy}

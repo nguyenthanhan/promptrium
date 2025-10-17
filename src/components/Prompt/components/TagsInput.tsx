@@ -173,7 +173,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
     <div ref={containerRef} className="space-y-1">
       <label
         htmlFor={inputId}
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-card-foreground"
       >
         Tags
       </label>
@@ -214,10 +214,10 @@ export const TagsInput: React.FC<TagsInputProps> = ({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           placeholder="Add a tag..."
-          className={`flex-1 h-10 px-3 py-2 border rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+          className={`flex-1 h-10 px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
             displayError
               ? "border-red-300 focus:ring-red-500"
-              : "border-gray-300"
+              : "border-border"
           }`}
           disabled={disabled}
           aria-describedby={displayError ? errorId : helpId}
@@ -239,7 +239,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       {/* Tag Suggestions Dropdown */}
       {showSuggestions && suggestedTags.length > 0 && (
         <div className="relative z-10">
-          <div className="absolute top-0 left-0 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+          <div className="absolute top-0 left-0 w-full bg-card border border-border rounded-lg shadow-lg max-h-40 overflow-y-auto">
             {suggestedTags.map((tag) => {
               const highlight = highlightMatch(tag, newTag);
               return (
@@ -251,14 +251,14 @@ export const TagsInput: React.FC<TagsInputProps> = ({
                     setNewTag("");
                     setShowSuggestions(false);
                   }}
-                  className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 focus:bg-blue-50 focus:outline-none border-b border-gray-100 last:border-b-0"
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 focus:bg-blue-50 focus:outline-none border-b border-border last:border-b-0"
                   disabled={disabled}
                 >
-                  <span className="text-gray-700">{highlight.before}</span>
+                  <span className="text-foreground">{highlight.before}</span>
                   <span className="text-blue-600 font-medium">
                     {highlight.match}
                   </span>
-                  <span className="text-gray-700">{highlight.after}</span>
+                  <span className="text-foreground">{highlight.after}</span>
                 </button>
               );
             })}
@@ -269,7 +269,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       {/* Available Tags */}
       {availableTags.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-gray-600">
+          <p className="text-xs font-medium text-muted-foreground">
             Available tags (click to add):
           </p>
           <div className="flex flex-wrap gap-2">
@@ -283,7 +283,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
                   disabled={
                     disabled || tags.length >= VALIDATION.TAGS.MAX_COUNT
                   }
-                  className="inline-flex items-center px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-blue-50 focus:text-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-full hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-blue-50 focus:text-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label={`Add tag: ${tag}`}
                 >
                   <Plus className="w-3 h-3 mr-1" />
@@ -301,7 +301,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
         </p>
       )}
 
-      <p id={helpId} className="text-xs text-gray-500">
+      <p id={helpId} className="text-xs text-muted-foreground">
         Press Enter or comma to add a tag. Click existing tags below or the X to
         remove. Maximum {VALIDATION.TAGS.MAX_COUNT} tags.
       </p>
