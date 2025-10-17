@@ -52,14 +52,14 @@ export default function Home() {
         onImport={handleImport}
       />
 
-      <div className="px-4 py-4 flex gap-4">
+      <div className="px-4 py-4 flex flex-col lg:flex-row gap-4">
         <FilterSidebar
           availableTags={availableTags}
           selectedTags={selectedTags}
           prompts={prompts}
           onTagsChange={handleTagsChange}
         />
-        
+
         <div className="flex-1">
           <PageMainContent
             prompts={prompts}

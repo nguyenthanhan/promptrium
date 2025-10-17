@@ -103,7 +103,7 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
 
   return (
     <main className="w-full">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredPrompts.map((prompt) => (
           <PromptCard
             key={prompt.id}
