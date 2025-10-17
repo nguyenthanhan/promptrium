@@ -55,7 +55,7 @@ export const PageModals: React.FC<PageModalsProps> = ({
         }}
       >
         <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[65vw] max-h-[90vh] flex flex-col !p-0">
-          <DialogHeader className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 rounded-t-lg">
+          <DialogHeader className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-3 rounded-t-lg">
             <div className="flex items-center justify-between">
               <DialogTitle>
                 {modalType === "create" ? "Create New Prompt" : "Edit Prompt"}
@@ -70,6 +70,7 @@ export const PageModals: React.FC<PageModalsProps> = ({
                   Cancel
                 </Button>
                 <Button
+                  variant="outline"
                   size="sm"
                   onClick={handleFormSubmit}
                   disabled={!formState.isFormValid || formState.isSubmitting}
@@ -118,10 +119,10 @@ export const PageModals: React.FC<PageModalsProps> = ({
               <Trash2 className="w-5 h-5 text-red-600" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium text-card-foreground">
                 Delete &ldquo;{selectedPrompt?.title}&rdquo;
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 This action cannot be undone.
               </p>
             </div>

@@ -35,7 +35,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 
   return (
     <div className="space-y-1">
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label htmlFor={id} className="block text-sm font-medium text-card-foreground">
         {label} {required && "*"}
       </label>
       <InputComponent
@@ -45,8 +45,8 @@ export const FormField: React.FC<FormFieldProps> = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={type === "textarea" ? rows : undefined}
-        className={`w-full ${type === "input" ? "h-10" : ""} px-3 py-2 border rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-          error ? "border-red-300 focus:ring-red-500" : "border-gray-300"
+        className={`w-full ${type === "input" ? "h-10" : ""} px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+          error ? "border-red-300 focus:ring-red-500" : "border-border"
         }`}
         disabled={disabled}
         required={required}
@@ -64,7 +64,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         </p>
       )}
       {showCharCount && maxLength && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted-foreground">
           {value.length}/{maxLength} characters
         </p>
       )}

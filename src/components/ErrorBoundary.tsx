@@ -32,25 +32,25 @@ const ErrorDisplay: React.FC<{
   error?: Error;
   onReset: () => void;
 }> = ({ error, onReset }) => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 text-center">
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="max-w-md w-full bg-card rounded-lg shadow-lg p-6 text-center">
       {/* Error Icon */}
       <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <AlertTriangle className="w-8 h-8 text-red-600" />
       </div>
 
       {/* Error Title */}
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">
+      <h2 className="text-xl font-semibold text-card-foreground mb-2">
         {ERROR_MESSAGES.title}
       </h2>
 
       {/* Error Description */}
-      <p className="text-gray-600 mb-6">{ERROR_MESSAGES.description}</p>
+      <p className="text-muted-foreground mb-6">{ERROR_MESSAGES.description}</p>
 
       {/* Error Details */}
       {error && (
         <details className="mb-4 text-left">
-          <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+          <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
             {ERROR_MESSAGES.errorDetails}
           </summary>
           <pre className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded overflow-auto">

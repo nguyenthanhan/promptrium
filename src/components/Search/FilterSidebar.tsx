@@ -39,8 +39,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   return (
-    <aside className="w-64 bg-white border border-gray-200 p-4 rounded-lg sticky top-4 flex flex-col max-h-[calc(100vh-6rem)]">
-      <h2 className="text-lg font-semibold mb-4 text-gray-900 flex-shrink-0">
+    <aside className="w-64 bg-card border border-border p-4 rounded-lg sticky top-4 flex flex-col max-h-[calc(100vh-6rem)]">
+      <h2 className="text-lg font-semibold mb-4 text-card-foreground flex-shrink-0">
         Tags
       </h2>
 
@@ -56,8 +56,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 onClick={() => handleTagClick(tag)}
                 className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-all duration-200 ${
                   isSelected
-                    ? "bg-blue-50 text-blue-700 border border-blue-200"
-                    : "text-gray-600 hover:bg-gray-50 border border-transparent"
+                    ? "bg-blue-background text-blue-foreground border border-blue-border"
+                    : "text-muted-foreground hover:bg-hover border border-transparent"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -68,8 +68,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   <span
                     className={`px-2.5 py-1 text-xs font-medium rounded-full ${
                       isSelected
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-200 text-gray-700"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-secondary-foreground"
                     }`}
                   >
                     {count}
@@ -80,9 +80,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
           })
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <Tag className="w-12 h-12 text-gray-300 mb-3" />
-            <p className="text-sm text-gray-500 font-medium">No tags available</p>
-            <p className="text-xs text-gray-400 mt-1">Create prompts with tags to see them here</p>
+            <Tag className="w-12 h-12 text-muted-foreground mb-3" />
+            <p className="text-sm text-muted-foreground font-medium">No tags available</p>
+            <p className="text-xs text-muted-foreground mt-1">Create prompts with tags to see them here</p>
           </div>
         )}
       </div>
@@ -90,7 +90,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {selectedTags.length > 0 && (
         <button
           onClick={() => onTagsChange([])}
-          className="w-full mt-4 px-4 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors flex-shrink-0"
+          className="w-full mt-4 px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-hover rounded-lg transition-colors flex-shrink-0"
         >
           Clear all filters
         </button>

@@ -7,6 +7,7 @@ import HeaderFilters from "@/components/Search/HeaderFilters";
 import SearchBar from "@/components/Search/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Plus, Download, Upload, Github } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface PageHeaderProps {
   searchQuery: string;
@@ -32,7 +33,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <header className="bg-white border-b border-gray-200">
+    <header className="bg-background border-b border-border">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 h-16">
           {/* Logo */}
@@ -44,7 +45,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               height={40}
               className="w-10 h-10"
             />
-            <h1 className="text-2xl font-bold text-gray-900 whitespace-nowrap">
+            <h1 className="text-2xl font-bold text-foreground whitespace-nowrap">
               Promptrium
             </h1>
           </div>
@@ -69,7 +70,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               variant="ghost"
               size="default"
               onClick={onExport}
-              className="border border-gray-200 hover:bg-gray-100 transition-all duration-200"
+              className="border border-border hover:bg-hover transition-all duration-200"
             >
               <Download className="w-5 h-5 mr-2" />
               Export
@@ -87,7 +88,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
                 size="default"
                 aria-label="Import from JSON"
                 onClick={() => fileInputRef.current?.click()}
-                className="border border-gray-200 hover:bg-gray-100 transition-all duration-200"
+                className="border border-border hover:bg-hover transition-all duration-200"
               >
                 <Upload className="w-5 h-5 mr-2" />
                 Import
@@ -97,12 +98,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               variant="outline"
               size="default"
               onClick={onCreateClick}
-              className="transition-all duration-200 border-gray-200 hover:bg-gray-100"
+              className="transition-all duration-200 border-border hover:bg-hover hover:bg-hover hover:bg-opacity-70"
               aria-label="Create a new prompt"
             >
               <Plus className="w-5 h-5 mr-2" />
               New Prompt
             </Button>
+
+            <ThemeToggle />
 
             <Button variant="ghost" size="icon" asChild>
               <a
@@ -110,7 +113,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View source code on GitHub"
-                className="border border-gray-200 transition-all duration-200 hover:bg-gray-100"
+                className="border border-border transition-all duration-200 hover:bg-hover"
               >
                 <Github className="w-4 h-4" />
               </a>

@@ -34,9 +34,9 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
       <main className="w-full">
         <div className="text-center py-12">
           <div className="animate-pulse">
-            <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-48 mx-auto mb-2"></div>
-            <div className="h-3 bg-gray-200 rounded w-32 mx-auto"></div>
+            <div className="w-16 h-16 bg-muted rounded-full mx-auto mb-4"></div>
+            <div className="h-4 bg-muted rounded w-48 mx-auto mb-2"></div>
+            <div className="h-3 bg-muted rounded w-32 mx-auto"></div>
           </div>
         </div>
       </main>
@@ -58,10 +58,10 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
                 className="w-16 h-16 mx-auto opacity-40"
               />
               <div>
-                <h3 className="text-lg font-medium text-gray-900">
+                <h3 className="text-lg font-medium text-foreground">
                   No prompts yet
                 </h3>
-                <p className="text-gray-500 mt-2">
+                <p className="text-muted-foreground mt-2">
                   Create your first prompt to get started.
                 </p>
               </div>
@@ -77,7 +77,7 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
           ) : (
             // No search results
             <div className="space-y-4">
-              <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto">
                 <Image
                   src="/logo.svg"
                   alt="Promptrium Logo"
@@ -87,10 +87,10 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
                 />
               </div>
               <div>
-                <h3 className="text-lg font-medium text-gray-900">
+                <h3 className="text-lg font-medium text-foreground">
                   No prompts found
                 </h3>
-                <p className="text-gray-500 mt-2">
+                <p className="text-muted-foreground mt-2">
                   Try adjusting your search or filters.
                 </p>
               </div>

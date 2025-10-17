@@ -114,7 +114,6 @@ export const PromptDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ? {
                 ...prompt,
                 is_favorite: !prompt.is_favorite,
-                updated_at: Date.now(),
               }
             : prompt
         )
@@ -131,7 +130,6 @@ export const PromptDataProvider: React.FC<{ children: React.ReactNode }> = ({
             ? {
                 ...prompt,
                 usage_count: prompt.usage_count + 1,
-                updated_at: Date.now(),
               }
             : prompt
         )
