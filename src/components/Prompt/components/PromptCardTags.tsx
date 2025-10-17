@@ -25,7 +25,7 @@ export const PromptCardTags: React.FC<PromptCardTagsProps> = ({
       {tags.map((tag, i) => (
         <span
           key={`${tag}-${i}`}
-          className="inline-flex items-center px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full border border-blue-200 hover:bg-blue-100 transition-all duration-200 whitespace-nowrap flex-shrink-0"
+          className="inline-flex items-center px-3 py-1.5 text-sm bg-blue-background text-blue-foreground rounded-full border border-blue-border hover:bg-blue-hover transition-all duration-200 whitespace-nowrap flex-shrink-0"
         >
           <Tag className="w-4 h-4 mr-1.5" />
           {tag}

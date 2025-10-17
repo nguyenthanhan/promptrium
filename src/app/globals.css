@@ -1,8 +1,60 @@
 @import "tailwindcss";
 
+@source "../**/*.{js,ts,jsx,tsx,mdx}";
+
+@variant dark (&:where(.dark, .dark *));
+
 :root {
+  /* Background colors */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111827;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+  
+  /* Primary colors */
+  --primary: #111827;
+  --primary-foreground: #ffffff;
+  
+  /* Secondary colors */
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+  
+  /* Muted colors */
+  --muted: #f9fafb;
+  --muted-foreground: #6b7280;
+  
+  /* Accent colors */
+  --accent: #f3f4f6;
+  --accent-foreground: #111827;
+  
+  /* Destructive colors */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  
+  /* Border and input colors */
+  --border: #d1d5db;
+  --input: #d1d5db;
+  --ring: #111827;
+  
+  /* Hover states */
+  --hover: #f3f4f6;
+  
+  /* Blue theme colors */
+  --blue-primary: #2563eb;
+  --blue-primary-foreground: #ffffff;
+  --blue-background: #eff6ff;
+  --blue-foreground: #1e40af;
+  --blue-border: #dbeafe;
+  --blue-hover: #dbeafe;
+  
+  /* Chart colors */
+  --chart-1: hsl(12 76% 61%);
+  --chart-2: hsl(173 58% 39%);
+  --chart-3: hsl(197 37% 24%);
+  --chart-4: hsl(43 74% 66%);
+  --chart-5: hsl(27 87% 67%);
   
   /* Scrollbar colors */
   --scrollbar-track: #f3f4f6;
@@ -10,11 +62,122 @@
   --scrollbar-thumb-hover: #9ca3af;
 }
 
+.dark {
+  /* Background colors */
+  --background: #111827;
+  --foreground: #f9fafb;
+  --card: #111827;
+  --card-foreground: #f9fafb;
+  --popover: #111827;
+  --popover-foreground: #f9fafb;
+  
+  /* Primary colors */
+  --primary: #f9fafb;
+  --primary-foreground: #111827;
+  
+  /* Secondary colors */
+  --secondary: #1f2937;
+  --secondary-foreground: #f9fafb;
+  
+  /* Muted colors */
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+  
+  /* Accent colors */
+  --accent: #1f2937;
+  --accent-foreground: #f9fafb;
+  
+  /* Destructive colors */
+  --destructive: #991b1b;
+  --destructive-foreground: #f9fafb;
+  
+  /* Border and input colors */
+  --border: #4b5563;
+  --input: #4b5563;
+  --ring: #9ca3af;
+  
+  /* Hover states */
+  --hover: #374151;
+  
+  /* Blue theme colors */
+  --blue-primary: #3b82f6;
+  --blue-primary-foreground: #ffffff;
+  --blue-background: #1e3a8a;
+  --blue-foreground: #93c5fd;
+  --blue-border: #1e40af;
+  --blue-hover: #1e3a8a;
+  
+  /* Chart colors */
+  --chart-1: hsl(220 70% 50%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+  
+  /* Scrollbar colors */
+  --scrollbar-track: #1e293b;
+  --scrollbar-thumb: #64748b;
+  --scrollbar-thumb-hover: #94a3b8;
+}
+
 @theme inline {
+  /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-hover: var(--hover);
+  
+  /* Blue theme */
+  --color-blue-primary: var(--blue-primary);
+  --color-blue-primary-foreground: var(--blue-primary-foreground);
+  --color-blue-background: var(--blue-background);
+  --color-blue-foreground: var(--blue-foreground);
+  --color-blue-border: var(--blue-border);
+  --color-blue-hover: var(--blue-hover);
+  
+  /* Chart colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Border color default */
+  --border-color: var(--border);
+  
+  /* Animations */
+  --animate-caret-blink: caret-blink 1s infinite;
+  
+  /* Keyframes */
+  @keyframes caret-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+}
+
+/* Override default border color */
+@utility border {
+  border-color: var(--border);
 }
 
 body {

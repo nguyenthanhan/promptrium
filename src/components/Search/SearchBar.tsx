@@ -39,12 +39,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
         value={localValue}
         onChange={handleInputChange}
         placeholder={placeholder}
-        className="block w-full h-10 pl-10 pr-10 border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+        className="block w-full h-10 pl-10 pr-10 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
       />
       {localValue && (
         <button
           onClick={handleClear}
-          className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+          className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground"
         >
           <X className="h-5 w-5" />
         </button>
