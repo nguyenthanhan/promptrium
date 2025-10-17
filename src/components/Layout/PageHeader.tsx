@@ -5,7 +5,6 @@ import Image from "next/image";
 import { SortKey } from "@/types";
 import HeaderFilters from "@/components/Search/HeaderFilters";
 import SearchBar from "@/components/Search/SearchBar";
-import TagsDropdown from "@/components/Search/TagsDropdown";
 import { Button } from "@/components/ui/button";
 import {
   Plus,
@@ -16,12 +15,9 @@ import {
 
 interface PageHeaderProps {
   searchQuery: string;
-  availableTags: string[];
-  selectedTags: string[];
   sortBy: SortKey;
   sortOrder: "asc" | "desc";
   onSearchChange: (query: string) => void;
-  onTagsChange: (tags: string[]) => void;
   onCreateClick: () => void;
   onSortChange: (sortBy: SortKey, sortOrder: "asc" | "desc") => void;
   onExport: () => void;
@@ -30,12 +26,9 @@ interface PageHeaderProps {
 
 export const PageHeader: React.FC<PageHeaderProps> = ({
   searchQuery,
-  availableTags,
-  selectedTags,
   sortBy,
   sortOrder,
   onSearchChange,
-  onTagsChange,
   onCreateClick,
   onSortChange,
   onExport,

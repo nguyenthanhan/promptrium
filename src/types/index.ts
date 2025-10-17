@@ -26,7 +26,7 @@ export type ModalType =
   | null;
 export type ViewMode = "grid" | "list";
 export type LayoutDensity = "compact" | "comfortable" | "expanded";
-export type SortKey = "updated" | "created" | "name" | "usage";
+export type SortKey = "updated" | "created";
 
 export interface PromptFormData {
   title: string;
@@ -64,16 +64,6 @@ export interface PromptContextType {
   exportData: () => void;
   importData: (file: File) => Promise<void>;
   clearAllData: () => void;
-}
-
-export interface PromptCardProps {
-  prompt: Prompt;
-  viewMode: ViewMode;
-  layoutDensity: LayoutDensity;
-  onEdit: (prompt: Prompt) => void;
-  onDelete: (prompt: Prompt) => void;
-  onCopy: (prompt: Prompt) => void;
-  onToggleFavorite: (prompt: Prompt) => void;
 }
 
 export interface PromptFormProps {

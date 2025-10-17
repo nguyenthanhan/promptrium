@@ -108,8 +108,6 @@ export const PageMainContent: React.FC<PageMainContentProps> = ({
           <PromptCard
             key={prompt.id}
             prompt={prompt}
-            viewMode="grid"
-            layoutDensity="comfortable"
             onEdit={onEditPrompt}
             onDelete={onDeletePrompt}
             onCopy={onCopyPrompt}

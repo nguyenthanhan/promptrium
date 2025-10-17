@@ -43,12 +43,9 @@ export default function Home() {
     <div className="min-h-screen">
       <PageHeader
         searchQuery={searchQuery}
-        availableTags={availableTags}
-        selectedTags={selectedTags}
         sortBy={sortBy}
         sortOrder={sortOrder}
         onSearchChange={handleSearchChange}
-        onTagsChange={handleTagsChange}
         onCreateClick={openCreateModal}
         onSortChange={handleSortChange}
         onExport={exportData}

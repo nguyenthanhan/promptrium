@@ -45,38 +45,46 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       </h2>
 
       <div className="space-y-0.5 overflow-y-auto flex-1 pr-2 scrollbar-custom min-h-0">
-        {availableTags.map((tag) => {
-          const isSelected = selectedTags.includes(tag);
-          const count = getTagCount(tag);
+        {availableTags.length > 0 ? (
+          availableTags.map((tag) => {
+            const isSelected = selectedTags.includes(tag);
+            const count = getTagCount(tag);
 
-          return (
-            <button
-              key={tag}
-              onClick={() => handleTagClick(tag)}
-              className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-all duration-200 ${
-                isSelected
-                  ? "bg-blue-50 text-blue-700 border border-blue-200"
-                  : "text-gray-600 hover:bg-gray-50 border border-transparent"
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <Tag className="w-4 h-4" />
-                <span className="text-sm">{tag}</span>
-              </div>
-              {count > 0 && (
-                <span
-                  className={`px-2.5 py-1 text-xs font-medium rounded-full ${
-                    isSelected
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  {count}
-                </span>
-              )}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-all duration-200 ${
+                  isSelected
+                    ? "bg-blue-50 text-blue-700 border border-blue-200"
+                    : "text-gray-600 hover:bg-gray-50 border border-transparent"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Tag className="w-4 h-4" />
+                  <span className="text-sm">{tag}</span>
+                </div>
+                {count > 0 && (
+                  <span
+                    className={`px-2.5 py-1 text-xs font-medium rounded-full ${
+                      isSelected
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <Tag className="w-12 h-12 text-gray-300 mb-3" />
+            <p className="text-sm text-gray-500 font-medium">No tags available</p>
+            <p className="text-xs text-gray-400 mt-1">Create prompts with tags to see them here</p>
+          </div>
+        )}
       </div>
 
       {selectedTags.length > 0 && (

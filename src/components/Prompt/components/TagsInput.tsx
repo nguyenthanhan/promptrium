@@ -21,6 +21,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
   const [newTag, setNewTag] = useState("");
   const [tagError, setTagError] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [shouldScrollToEnd, setShouldScrollToEnd] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Generate unique IDs to prevent conflicts when multiple instances exist
@@ -28,6 +29,27 @@ export const TagsInput: React.FC<TagsInputProps> = ({
   const inputId = `tags-${baseId}`;
   const errorId = `tags-error-${baseId}`;
   const helpId = `tags-help-${baseId}`;
+
+  // Reusable scroll function
+  const scrollToContainer = useCallback((block: ScrollLogicalPosition = 'nearest') => {
+    if (containerRef.current) {
+      const scrollableParent = containerRef.current.closest('.overflow-y-auto');
+      if (scrollableParent) {
+        containerRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block,
+        });
+      }
+    }
+  }, []);
+
+  // Scroll after tags array is updated
+  useEffect(() => {
+    if (shouldScrollToEnd) {
+      scrollToContainer('end');
+      setShouldScrollToEnd(false);
+    }
+  }, [tags, shouldScrollToEnd, scrollToContainer]);
 
   const handleAddTag = useCallback(() => {
     const tag = newTag.trim();
@@ -46,19 +68,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
     if (!tags.includes(tag)) {
       onTagsChange([...tags, tag]);
       setTagError("");
-      
-      // Scroll to show the newly added tag
-      if (containerRef.current) {
-        const scrollableParent = containerRef.current.closest('.overflow-y-auto');
-        if (scrollableParent) {
-          setTimeout(() => {
-            containerRef.current?.scrollIntoView({
-              behavior: 'smooth',
-              block: 'end',
-            });
-          }, 100);
-        }
-      }
+      setShouldScrollToEnd(true);
     }
     // Always clear input after attempting to add
     setNewTag("");
@@ -81,6 +91,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
         onTagsChange([...tags, tagToAdd]);
         setNewTag("");
         setTagError("");
+        setShouldScrollToEnd(true);
       }
     },
     [tags, onTagsChange]
@@ -122,20 +133,8 @@ export const TagsInput: React.FC<TagsInputProps> = ({
     if (newTag.trim().length > 0) {
       setShowSuggestions(true);
     }
-    
-    // Scroll to tags section when input is focused
-    if (containerRef.current) {
-      const scrollableParent = containerRef.current.closest('.overflow-y-auto');
-      if (scrollableParent) {
-        setTimeout(() => {
-          containerRef.current?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-          });
-        }, 100);
-      }
-    }
-  }, [newTag]);
+    scrollToContainer('nearest');
+  }, [newTag, scrollToContainer]);
 
   const handleInputBlur = useCallback(() => {
     // Delay hiding suggestions to allow clicks on suggestion items
