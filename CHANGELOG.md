@@ -5,58 +5,31 @@ All notable changes to the Promptrium project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2025-09-11
+## [0.3.0] - 2025-10-17
+
+### Changed
+
+- Simplified to grid-only layout (removed dual view mode)
+- Streamlined sorting to "Last Updated" and "Created Date" only
+- Removed unused tag filtering from PageHeader
 
 ### Added
 
-- **Accessibility Improvements**: Enhanced keyboard navigation for tooltips
-  - Added `tabIndex={0}` to non-focusable elements wrapped in TooltipTrigger
-  - Added `title` attributes as non-JS fallbacks for tooltip content
-  - Improved keyboard accessibility for prompt cards in list view
+- Empty state message for tags in FilterSidebar
+- CSS variables for scrollbar theming
+- Accessibility improvements (aria-labels)
 
 ### Fixed
 
-- **Type Safety**: Updated PromptForm onSubmit type to support async handlers
-  - Changed `onSubmit: (data: PromptFormData) => void` to `onSubmit: (data: PromptFormData) => Promise<void> | void`
-  - Enables proper typing for asynchronous form submission handlers
+- TagsDropdown Apply button now properly closes dropdown
+- TagsInput scroll behavior (replaced setTimeout with useEffect)
+- TagsInput validation UX (preserves input on errors)
 
-- **useLocalStorage Hook**: Enhanced safety and reliability
-  - Added `isPlainObject` helper to detect plain objects safely
-  - Fixed unsafe spreading of parsed JSON that could cause runtime errors
-  - Only merge objects when both stored and initial values are plain objects
-  - Use parsed value directly for primitives, arrays, and other non-object types
-  - Set mounted flag only after load completes to prevent extra renders
-  - Updated `initialValueRef` when key changes to maintain consistency
+### Removed
 
-### Improved
-
-- **Error Handling**: Better error handling for localStorage operations
-- **Type Safety**: More robust type checking throughout the application
-- **Performance**: Reduced unnecessary re-renders in useLocalStorage hook
-
-## [0.1.2] - 2025-09-04
-
-### Fixed
-
-- **Modal Responsiveness**: Fixed Create New Prompt modal sizing for better mobile experience
-  - Responsive width: 95% on mobile, scaling up to 50% on large screens
-  - Added scroll support with `max-h-[90vh] overflow-y-auto`
-  - Reduced form padding on mobile devices for better space utilization
-  - Improved button layout: stacked on mobile, horizontal on desktop
-
-### Improved
-
-- **Modal UX**: Enhanced modal header and close button behavior
-
-  - Sticky header positioning - "Create New Prompt" title always visible
-  - Close button (X) always accessible and visible
-  - Better visual separation with header border
-  - Improved scroll behavior with content-only scrolling
-
-- **Mobile Experience**: Optimized form layout for small screens
-  - Reduced textarea height on mobile (4 rows vs 6 rows)
-  - Full-width buttons on mobile for easier interaction
-  - Better spacing and padding for touch interfaces
+- 8+ unused component files (PromptCardGrid, PromptCardList, FilterPanel, TagsPanel, etc.)
+- Unused `viewMode` and `layoutDensity` props
+- Unused hook functions and type definitions
 
 ---
 

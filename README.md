@@ -23,7 +23,7 @@
 - **Advanced Search**: Real-time search across prompt titles, content, and descriptions
 - **Tag Filtering**: Filter prompts by one or multiple tags
 - **Favorites Filter**: Quickly view only your favorite prompts
-- **Smart Sorting**: Sort by creation date, update date, name, or usage count
+- **Smart Sorting**: Sort by creation date or last updated
 
 ### 📊 **Analytics & Tracking**
 
