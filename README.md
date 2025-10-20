@@ -36,6 +36,8 @@
 - **Modern Layout**: A new, improved layout with a responsive sidebar, header, and main content area
 - **Grid View**: Clean 3-column grid layout for optimal prompt browsing
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Dark/Light Mode**: Manual theme toggle with smooth transitions and persistent preference
+- **Theme System**: CSS-first theming with TailwindCSS v4 for consistent colors across modes
 - **One-Click Copy**: Copy prompts to clipboard with visual feedback
 - **Toast Notifications**: Immediate feedback for all user actions
 - **Loading States**: Smooth loading experience with skeleton screens
@@ -51,9 +53,11 @@
 
 - **TypeScript**: Full type safety throughout the application
 - **Modern React**: Built with React 19 and modern hooks
+- **TailwindCSS v4**: CSS-first configuration with native CSS variables and animations
 - **Component Architecture**: Well-structured, reusable components
 - **Performance Optimized**: Memoized components and efficient state management
-- **Code Formatting**: Integrated with Prettier for consistent code style.
+- **Code Formatting**: Integrated with Prettier for consistent code style
+- **Theme Variables**: Centralized color system with CSS variables for easy customization
 
 ## 🚀 Getting Started
 

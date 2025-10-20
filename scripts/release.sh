@@ -179,14 +179,14 @@ npm version $NEW_VERSION --no-git-tag-version
 if [ -f "CHANGELOG.md" ]; then
     print_info "Updating CHANGELOG.md with release date..."
     TODAY=$(date +"%Y-%m-%d")
-    sed -i "s/## \[$NEW_VERSION\] - [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/## [$NEW_VERSION] - $TODAY/" CHANGELOG.md
+    sed -i '' "s/## \[$NEW_VERSION\] - [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/## [$NEW_VERSION] - $TODAY/" CHANGELOG.md
 fi
 
 # Update README.md version badge if it exists
 if [ -f "README.md" ]; then
     print_info "Updating README.md version badge to $NEW_VERSION..."
     # Update the version badge in README.md
-    sed -i "s/badge\/version-[0-9]\+\.[0-9]\+\.[0-9]\+/badge\/version-$NEW_VERSION/" README.md
+    sed -i '' "s/badge\/version-[0-9]\+\.[0-9]\+\.[0-9]\+/badge\/version-$NEW_VERSION/" README.md
 fi
 
 # Stage files for commit

@@ -5,31 +5,32 @@ All notable changes to the Promptrium project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2025-10-17
+## [0.4.0] - 2025-10-20
 
 ### Changed
 
-- Simplified to grid-only layout (removed dual view mode)
-- Streamlined sorting to "Last Updated" and "Created Date" only
-- Removed unused tag filtering from PageHeader
+- Migrated to TailwindCSS v4 with CSS-first configuration
+- Moved all theme configuration from `tailwind.config.ts` to `globals.css`
+- Centralized all hard-coded colors (red, gray, blue) into CSS variables
+- Theme toggle simplified to manual light/dark selection only
 
 ### Added
 
-- Empty state message for tags in FilterSidebar
-- CSS variables for scrollbar theming
-- Accessibility improvements (aria-labels)
-
-### Fixed
-
-- TagsDropdown Apply button now properly closes dropdown
-- TagsInput scroll behavior (replaced setTimeout with useEffect)
-- TagsInput validation UX (preserves input on errors)
+- CSS variables for error, gray, and blue color shades
+- Native CSS keyframes for all animations
+- Theme-aware colors that adapt to dark/light mode
 
 ### Removed
 
-- 8+ unused component files (PromptCardGrid, PromptCardList, FilterPanel, TagsPanel, etc.)
-- Unused `viewMode` and `layoutDensity` props
-- Unused hook functions and type definitions
+- `tailwind.config.ts` file
+- `tailwindcss-animate` dependency
+- System theme detection support
+
+### Fixed
+
+- Dark/light mode not applying correctly
+- Tag remove button hover feedback
+- Theme toggle form submission behavior
 
 ---
 
