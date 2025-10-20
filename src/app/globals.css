@@ -33,6 +33,16 @@
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   
+  /* Error colors */
+  --error-background: #fef2f2;
+  --error-foreground: #dc2626;
+  --error-hover: #dc2626;
+  --error-border: #fecaca;
+  --error-ring: #ef4444;
+  --error-light: #fca5a5;
+  --error-muted: #fef2f2;
+  --error-ring-offset: #dc2626;
+  
   /* Border and input colors */
   --border: #d1d5db;
   --input: #d1d5db;
@@ -48,6 +58,16 @@
   --blue-foreground: #1e40af;
   --blue-border: #dbeafe;
   --blue-hover: #dbeafe;
+  --blue-light: #dbeafe;
+  --blue-tag-bg: #dbeafe;
+  --blue-tag-text: #1e40af;
+  --blue-accent: #2563eb;
+  --blue-accent-hover: #1d4ed8;
+  
+  /* Gray colors */
+  --gray-icon: #9ca3af;
+  --gray-text: #6b7280;
+  --gray-hover: #f3f4f6;
   
   /* Chart colors */
   --chart-1: hsl(12 76% 61%);
@@ -91,6 +111,16 @@
   --destructive: #991b1b;
   --destructive-foreground: #f9fafb;
   
+  /* Error colors */
+  --error-background: #450a0a;
+  --error-foreground: #fca5a5;
+  --error-hover: #dc2626;
+  --error-border: #991b1b;
+  --error-ring: #dc2626;
+  --error-light: #fca5a5;
+  --error-muted: #fef2f2;
+  --error-ring-offset: #dc2626;
+  
   /* Border and input colors */
   --border: #4b5563;
   --input: #4b5563;
@@ -106,6 +136,16 @@
   --blue-foreground: #93c5fd;
   --blue-border: #1e40af;
   --blue-hover: #1e3a8a;
+  --blue-light: #1e40af;
+  --blue-tag-bg: #1e3a8a;
+  --blue-tag-text: #93c5fd;
+  --blue-accent: #3b82f6;
+  --blue-accent-hover: #2563eb;
+  
+  /* Gray colors */
+  --gray-icon: #6b7280;
+  --gray-text: #9ca3af;
+  --gray-hover: #374151;
   
   /* Chart colors */
   --chart-1: hsl(220 70% 50%);
@@ -138,6 +178,14 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-error-background: var(--error-background);
+  --color-error-foreground: var(--error-foreground);
+  --color-error-hover: var(--error-hover);
+  --color-error-border: var(--error-border);
+  --color-error-ring: var(--error-ring);
+  --color-error-light: var(--error-light);
+  --color-error-muted: var(--error-muted);
+  --color-error-ring-offset: var(--error-ring-offset);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -150,6 +198,16 @@
   --color-blue-foreground: var(--blue-foreground);
   --color-blue-border: var(--blue-border);
   --color-blue-hover: var(--blue-hover);
+  --color-blue-light: var(--blue-light);
+  --color-blue-tag-bg: var(--blue-tag-bg);
+  --color-blue-tag-text: var(--blue-tag-text);
+  --color-blue-accent: var(--blue-accent);
+  --color-blue-accent-hover: var(--blue-accent-hover);
+  
+  /* Gray colors */
+  --color-gray-icon: var(--gray-icon);
+  --color-gray-text: var(--gray-text);
+  --color-gray-hover: var(--gray-hover);
   
   /* Chart colors */
   --color-chart-1: var(--chart-1);

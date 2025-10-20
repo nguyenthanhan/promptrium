@@ -90,7 +90,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {selectedTags.length > 0 && (
         <button
           onClick={() => onTagsChange([])}
-          className="w-full mt-4 px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-hover rounded-lg transition-colors flex-shrink-0"
+          className="w-full mt-4 px-4 py-2 text-sm text-blue-accent hover:text-blue-accent-hover hover:bg-hover rounded-lg transition-colors flex-shrink-0"
         >
           Clear all filters
         </button>

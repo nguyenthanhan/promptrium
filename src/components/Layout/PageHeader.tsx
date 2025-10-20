@@ -98,7 +98,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               variant="outline"
               size="default"
               onClick={onCreateClick}
-              className="transition-all duration-200 border-border hover:bg-hover hover:bg-hover hover:bg-opacity-70"
+              className="transition-all duration-200 border-border hover:bg-hover hover:bg-opacity-70"
               aria-label="Create a new prompt"
             >
               <Plus className="w-5 h-5 mr-2" />

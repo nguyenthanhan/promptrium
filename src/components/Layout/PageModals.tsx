@@ -115,8 +115,8 @@ export const PageModals: React.FC<PageModalsProps> = ({
             <DialogTitle>Delete Prompt</DialogTitle>
           </DialogHeader>
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-              <Trash2 className="w-5 h-5 text-red-600" />
+            <div className="w-10 h-10 bg-error-background rounded-full flex items-center justify-center">
+              <Trash2 className="w-5 h-5 text-error-foreground" />
             </div>
             <div>
               <h3 className="text-lg font-medium text-card-foreground">

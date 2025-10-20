@@ -21,7 +21,7 @@ export const PromptCardMetadata: React.FC<PromptCardMetadataProps> = ({
   if (variant === "list") {
     return (
       <div
-        className={`flex items-center space-x-6 text-sm text-gray-500 ${className}`}
+        className={`flex items-center space-x-6 text-sm text-gray-text ${className}`}
       >
         <div className="flex items-center space-x-2">
           <Calendar className="w-5 h-5" />
@@ -37,7 +37,7 @@ export const PromptCardMetadata: React.FC<PromptCardMetadataProps> = ({
 
   return (
     <div
-      className={`flex items-center justify-between text-sm text-gray-500 ${className}`}
+      className={`flex items-center justify-between text-sm text-gray-text ${className}`}
     >
       <div className="flex items-center space-x-2">
         <Calendar className="w-5 h-5" />

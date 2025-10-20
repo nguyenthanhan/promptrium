@@ -35,8 +35,8 @@ const ErrorDisplay: React.FC<{
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="max-w-md w-full bg-card rounded-lg shadow-lg p-6 text-center">
       {/* Error Icon */}
-      <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <AlertTriangle className="w-8 h-8 text-red-600" />
+      <div className="w-16 h-16 bg-error-background rounded-full flex items-center justify-center mx-auto mb-4">
+        <AlertTriangle className="w-8 h-8 text-error-foreground" />
       </div>
 
       {/* Error Title */}
@@ -53,7 +53,7 @@ const ErrorDisplay: React.FC<{
           <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
             {ERROR_MESSAGES.errorDetails}
           </summary>
-          <pre className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded overflow-auto">
+          <pre className="mt-2 text-xs text-error-foreground bg-error-background p-2 rounded overflow-auto">
             {error.message}
           </pre>
         </details>
