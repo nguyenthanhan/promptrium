@@ -61,6 +61,7 @@
   --blue-light: #dbeafe;
   --blue-tag-bg: #dbeafe;
   --blue-tag-text: #1e40af;
+  --blue-tag-hover: #1d4ed8;
   --blue-accent: #2563eb;
   --blue-accent-hover: #1d4ed8;
   
@@ -139,6 +140,7 @@
   --blue-light: #1e40af;
   --blue-tag-bg: #1e3a8a;
   --blue-tag-text: #93c5fd;
+  --blue-tag-hover: #60a5fa;
   --blue-accent: #3b82f6;
   --blue-accent-hover: #2563eb;
   
@@ -201,6 +203,7 @@
   --color-blue-light: var(--blue-light);
   --color-blue-tag-bg: var(--blue-tag-bg);
   --color-blue-tag-text: var(--blue-tag-text);
+  --color-blue-tag-hover: var(--blue-tag-hover);
   --color-blue-accent: var(--blue-accent);
   --color-blue-accent-hover: var(--blue-accent-hover);
   
@@ -231,6 +234,82 @@
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
   }
+  
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+  
+  @keyframes slide-in-from-top {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+  }
+  
+  @keyframes slide-in-from-bottom {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  
+  @keyframes slide-in-from-left {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+  
+  @keyframes slide-in-from-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  
+  @keyframes slide-out-to-top {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
+  }
+  
+  @keyframes slide-out-to-bottom {
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
+  }
+  
+  @keyframes slide-out-to-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+  
+  @keyframes slide-out-to-right {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  
+  @keyframes zoom-in {
+    from { transform: scale(0.95); }
+    to { transform: scale(1); }
+  }
+  
+  @keyframes zoom-out {
+    from { transform: scale(1); }
+    to { transform: scale(0.95); }
+  }
+  
+  /* Animation utilities */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-in: fade-in 0.2s ease-out;
+  --animate-out: fade-out 0.2s ease-in;
 }
 
 /* Override default border color */

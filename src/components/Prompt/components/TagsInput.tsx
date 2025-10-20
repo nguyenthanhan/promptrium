@@ -189,7 +189,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
               <button
                 type="button"
                 onClick={() => handleRemoveTag(tag)}
-                className="ml-2 hover:text-blue-foreground focus:outline-none focus:ring-2 focus:ring-blue-primary rounded"
+                className="ml-2 hover:text-blue-tag-hover focus:outline-none focus:ring-2 focus:ring-blue-primary rounded"
                 disabled={disabled}
                 aria-label={`Remove tag: ${tag}`}
               >
