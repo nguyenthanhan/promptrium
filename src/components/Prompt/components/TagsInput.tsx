@@ -183,13 +183,13 @@ export const TagsInput: React.FC<TagsInputProps> = ({
           {tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full"
+              className="inline-flex items-center px-3 py-1 text-sm bg-blue-tag-bg text-blue-tag-text rounded-full"
             >
               {tag}
               <button
                 type="button"
                 onClick={() => handleRemoveTag(tag)}
-                className="ml-2 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                className="ml-2 hover:text-blue-foreground focus:outline-none focus:ring-2 focus:ring-blue-primary rounded"
                 disabled={disabled}
                 aria-label={`Remove tag: ${tag}`}
               >
@@ -214,9 +214,9 @@ export const TagsInput: React.FC<TagsInputProps> = ({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           placeholder="Add a tag..."
-          className={`flex-1 h-10 px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+          className={`flex-1 h-10 px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-primary focus:border-transparent transition-colors ${
             displayError
-              ? "border-red-300 focus:ring-red-500"
+              ? "border-error-border focus:ring-error-ring"
               : "border-border"
           }`}
           disabled={disabled}
@@ -251,11 +251,11 @@ export const TagsInput: React.FC<TagsInputProps> = ({
                     setNewTag("");
                     setShowSuggestions(false);
                   }}
-                  className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 focus:bg-blue-50 focus:outline-none border-b border-border last:border-b-0"
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-blue-light focus:bg-blue-light focus:outline-none border-b border-border last:border-b-0"
                   disabled={disabled}
                 >
                   <span className="text-foreground">{highlight.before}</span>
-                  <span className="text-blue-600 font-medium">
+                  <span className="text-blue-foreground font-medium">
                     {highlight.match}
                   </span>
                   <span className="text-foreground">{highlight.after}</span>
@@ -283,7 +283,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
                   disabled={
                     disabled || tags.length >= VALIDATION.TAGS.MAX_COUNT
                   }
-                  className="inline-flex items-center px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-full hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-blue-50 focus:text-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-full hover:bg-blue-light hover:text-blue-foreground focus:outline-none focus:ring-2 focus:ring-blue-primary focus:bg-blue-light focus:text-blue-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label={`Add tag: ${tag}`}
                 >
                   <Plus className="w-3 h-3 mr-1" />
@@ -295,7 +295,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
       )}
 
       {displayError && (
-        <p id={errorId} className="text-sm text-red-600 flex items-center">
+        <p id={errorId} className="text-sm text-error-foreground flex items-center">
           <AlertCircle className="w-4 h-4 mr-1" />
           {displayError}
         </p>

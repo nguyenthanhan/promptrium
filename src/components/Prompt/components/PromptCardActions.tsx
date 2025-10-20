@@ -33,7 +33,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
           disabled={copied}
           className={`p-2 shadow-sm transition-all duration-200 ${
             copied
-              ? "text-blue-500 cursor-not-allowed opacity-75"
+              ? "text-blue-accent cursor-not-allowed opacity-75"
               : "hover:shadow-md"
           }`}
           aria-label={copied ? "Copied to clipboard" : "Copy prompt content"}
@@ -65,7 +65,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
           variant="ghost"
           size="default"
           onClick={() => onDelete(prompt)}
-          className="p-2 text-red-500 hover:text-red-700 shadow-sm hover:shadow-md transition-all duration-200"
+          className="p-2 text-destructive hover:text-error-hover shadow-sm hover:shadow-md transition-all duration-200"
           aria-label="Delete prompt"
         >
           <Trash2 className="w-5 h-5" />
@@ -83,9 +83,7 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
         onClick={onCopy}
         disabled={copied}
         className={`flex-1 border border-border hover:bg-hover transition-all duration-200 ${
-          copied
-            ? "bg-blue-500 text-white cursor-not-allowed"
-            : ""
+          copied ? "bg-blue-accent text-white cursor-not-allowed" : ""
         }`}
         aria-label={copied ? "Copied to clipboard" : "Copy prompt content"}
       >
@@ -118,11 +116,15 @@ export const PromptCardActions: React.FC<PromptCardActionsProps> = ({
           size="default"
           onClick={() => onToggleFavorite(prompt)}
           className={`w-10 h-10 p-2 border border-border  hover:bg-hover transition-all duration-200 ${
-            prompt.is_favorite ? "text-red-500" : "text-card-foreground"
+            prompt.is_favorite ? "text-destructive" : "text-card-foreground"
           }`}
-          aria-label={prompt.is_favorite ? "Remove from favorites" : "Add to favorites"}
+          aria-label={
+            prompt.is_favorite ? "Remove from favorites" : "Add to favorites"
+          }
         >
-          <Heart className={`w-5 h-5 ${prompt.is_favorite ? "fill-current" : ""}`} />
+          <Heart
+            className={`w-5 h-5 ${prompt.is_favorite ? "fill-current" : ""}`}
+          />
         </Button>
       )}
       <Button

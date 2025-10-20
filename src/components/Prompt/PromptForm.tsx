@@ -137,8 +137,8 @@ const PromptForm = forwardRef<PromptFormRef, ExtendedPromptFormProps>(
 
         {/* Submit Error */}
         {errors.submit && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-600 flex items-center">
+          <div className="p-3 bg-error-background border border-error-border rounded-lg">
+            <p className="text-sm text-error-foreground flex items-center">
               <AlertCircle className="w-4 h-4 mr-1" />
               {errors.submit}
             </p>
